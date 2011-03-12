@@ -3,8 +3,8 @@ Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.0
-Tested up to: 3.1RC2
-Stable tag: 0.5
+Tested up to: 3.1
+Stable tag: 0.6
 
 Plugin for developers of WordPress to provide easy back-end instructions to their clients - using text, video, audio - whatever.
 
@@ -118,6 +118,10 @@ But if you have any, by all means, feel free to ask away.  I'd also love input o
 [Screenshot3](http://brassblogs.com/plugins/bei/bei2.png "Back End Instructions")
 
 == Changelog ==
+
+= 0.6 = 
+* fixed issue where instructions were not showing up on individual posts (post.php)
+* repaired path to css and script files
 
 = 0.5 = 
 * added video and inserted a default post to show an example of use

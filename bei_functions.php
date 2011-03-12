@@ -3,7 +3,7 @@ add_action('admin_head', 'enqueue_back_end_header');
 add_action('admin_notices', 'back_end_help_section');
 
 // set up reusable defaults to globalize later
-$pluginloc = plugins_url() . '/BackEndInstructions/';
+$pluginloc = plugins_url() . '/back-end-instructions/';
 $address = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"];
 $addy_parts = explode('/', $address);
 $endofurl = end($addy_parts);
@@ -69,8 +69,9 @@ function back_end_help_section($type='') { 		// the output to actually show the 
           	$isvimeo = 'no';
           }
           
-          if(($whatpage == $pagenow) || (strpos($whatpage, $pagenow) !== false)) {  // test that this content is for this page
-                    
+          if($whatpage == $pagenow || strpos($whatpage, $pagenow) !== false) {  // test that this content is for this page
+           
+          $class = 'activate';        
             // ensure that role-specific instructions only appear to those roles
             if(current_user_can('activate_plugins') && $admin == 'true' ||
                current_user_can('edit_others_posts') && $editor == 'true' ||
@@ -78,7 +79,7 @@ function back_end_help_section($type='') { 		// the output to actually show the 
                current_user_can('edit_posts') && $contributor == 'true' ||
                current_user_can('read') && $level == '') {
                	
-               if($endofurl != $whatpage) continue; // make sure the proper stuff shows up for post types and plugins 	
+               if(strpos($whatpage, $endofurl)) continue; // make sure the proper stuff shows up for post types and plugins 	
           	
         	  $output .= '<p><a class="bei_showlink' . $count . '" href="' . $url . '">' . $title . '</a> &nbsp; <em>' . $excerpt . '</em></p>' . "\n";
         	  if(!empty($video)) {
@@ -108,8 +109,7 @@ function back_end_help_section($type='') { 		// the output to actually show the 
            
           $count++; 
           } 
-             
-          $class = 'activate';
+            
         }
 
     endforeach;
