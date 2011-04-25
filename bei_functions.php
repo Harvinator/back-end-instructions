@@ -31,6 +31,7 @@ function back_end_help_section($type='') { 		// the output to actually show the 
 
 	  // test for dashboard	 
 	  if($pagenow == 'index.php') $dashboard = 'true'; 
+	  else $dashboard = 'false';
 
       $count = '0';
       foreach($pageposts as $instruction): setup_postdata($instruction);
@@ -42,7 +43,8 @@ function back_end_help_section($type='') { 		// the output to actually show the 
         $content = $instruction->post_content;					// instruction post content
         $excerpt = $instruction->post_excerpt;					// instruction post excerpt
         $meta = get_post_meta($postid, 'instructions'); 		// instruction post meta: top of the array       
-        $summarymeta = get_post_meta($postid, 'extras');		
+        $summarymeta = get_post_meta($postid, 'extras');	
+        if(!empty($summarymeta)) 
         $summary = $summarymeta[0]['summary'];					// instruction post meta: secondary excerpt
         $whatpage = $meta[0]['page_id'];						// instruction post meta value: the page to show on
         $video = $meta[0]['video_url'];							// instruction post meta value: the video URL
@@ -68,6 +70,9 @@ function back_end_help_section($type='') { 		// the output to actually show the 
           	$isyoutube = 'no';
           	$isvimeo = 'no';
           }
+          
+          //set up the class
+          $class = '';
           
           if($whatpage == $pagenow || strpos($whatpage, $pagenow) !== false) {  // test that this content is for this page
            
