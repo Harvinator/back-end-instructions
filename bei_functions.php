@@ -1,12 +1,13 @@
 <?php
-add_action('admin_head', 'enqueue_back_end_header');
-add_action('admin_notices', 'back_end_help_section');
+add_action('admin_head', 'bei_enqueue_back_end_header');
+add_action('admin_notices', 'bei_back_end_help_section');
 
 // set up reusable defaults to globalize later
 $pluginloc = plugins_url() . '/back-end-instructions/';
 $address = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"];
 $addy_parts = explode('/', $address);
 $endofurl = end($addy_parts);
+$class='';
 
 
 // internationalization - just a starting point - feel free to uncomment and use
@@ -16,8 +17,8 @@ $endofurl = end($addy_parts);
 	Let's deal with the output - i.e. show those instructions!
 -----------------------------------------------------------------------------*/
 
-function back_end_help_section($type='') { 		// the output to actually show the instructions
-  global $pluginloc, $current_user, $wpdb, $post, $pagenow, $endofurl;
+function bei_back_end_help_section($type='') { 		// the output to actually show the instructions
+  global $pluginloc, $current_user, $wpdb, $post, $pagenow, $endofurl, $class, $address;
   get_currentuserinfo();						// set up current user information
 
   // start the query to pull the correct post into the instructions area
@@ -32,8 +33,16 @@ function back_end_help_section($type='') { 		// the output to actually show the 
 	  // test for dashboard	 
 	  if($pagenow == 'index.php') $dashboard = 'true'; 
 	  else $dashboard = 'false';
-
+	  
+	  // set up variables
       $count = '0';
+      $admin = '';
+      $editor = '';
+      $author = '';
+      $contributor = '';
+      $whatpage = '';
+      $video = '';
+      $level ='';
       foreach($pageposts as $instruction): setup_postdata($instruction);
 
       // get values for each insctructable and set up reusable variables
@@ -42,16 +51,15 @@ function back_end_help_section($type='') { 		// the output to actually show the 
         $title = $instruction->post_title;						// instruction post title
         $content = $instruction->post_content;					// instruction post content
         $excerpt = $instruction->post_excerpt;					// instruction post excerpt
-        $meta = get_post_meta($postid, 'instructions'); 		// instruction post meta: top of the array       
-        $summarymeta = get_post_meta($postid, 'extras');	
-        if(!empty($summarymeta)) 
-        $summary = $summarymeta[0]['summary'];					// instruction post meta: secondary excerpt
-        $whatpage = $meta[0]['page_id'];						// instruction post meta value: the page to show on
-        $video = $meta[0]['video_url'];							// instruction post meta value: the video URL
-        $level = $meta[0]['user_level'];						// instruction post meta value: the user level allowed
+        $meta = get_post_meta($postid, 'instructions'); 		// instruction post meta: top of the array
+        if(!empty($meta[0])) {       
+          $whatpage = $meta[0]['page_id'];						// instruction post meta value: the page to show on
+          $video = $meta[0]['video_url'];							// instruction post meta value: the video URL
+          $level = $meta[0]['user_level'];						// instruction post meta value: the user level allowed
+        }
         if($dashboard == 'true') $endofurl = 'index.php';		// show dashboard instructions on login
              
-        // set up the user levels to comapre to the current user level
+        // set up the user levels to compare to the current user level
         if(strtolower($level) == 'administrator') $admin = 'true';
         if(strtolower($level) == 'editor') $editor = 'true';
         if(strtolower($level) == 'author') $author = 'true';
@@ -71,12 +79,11 @@ function back_end_help_section($type='') { 		// the output to actually show the 
           	$isvimeo = 'no';
           }
           
-          //set up the class
-          $class = '';
-          
-          if($whatpage == $pagenow || strpos($whatpage, $pagenow) !== false) {  // test that this content is for this page
+          $address = array_reverse(explode('/', $address));
+          $address = $address[0];
+          if($whatpage == $pagenow || $whatpage == $address) {  // test that this content is for this page
            
-          $class = 'activate';        
+          $class = 'activate';      
             // ensure that role-specific instructions only appear to those roles
             if(current_user_can('activate_plugins') && $admin == 'true' ||
                current_user_can('edit_others_posts') && $editor == 'true' ||
@@ -104,7 +111,7 @@ function back_end_help_section($type='') { 		// the output to actually show the 
         	      $output .= '</object>' . "\n";
         	  	}
         	  	
-        	    $output .= apply_filters('the_content', $summary);        	    
+        	    $output .= apply_filters('the_content', $post->post_content);        	    
       			$output .= '</div>' . "\n";
         	  } else { // show the content of the post for text instructions
         	    $output .= '<div class="bei_help_video' . $count . '">' . "\n";

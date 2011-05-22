@@ -1,11 +1,13 @@
 <?php
 // adding the stuff to the page headers
-function enqueue_back_end_header() { 
+function bei_enqueue_back_end_header() { 
   global $pluginloc; // this, and the next few lines are defined in bei_functions.php
   wp_enqueue_script('jquery');
-  $count = back_end_help_section('count'); // how many items
-  $video = back_end_help_section('video'); // code for video output
-  $activate = back_end_help_section('activate'); // set activation flag
+  $count = bei_back_end_help_section('count'); // how many items
+  $video = bei_back_end_help_section('video'); // code for video output
+  $activate = bei_back_end_help_section('activate'); // set activation flag
+  $css_file = WP_CONTENT_DIR . '/themes/' . get_template() . '/bei_style.css'; // if your styles are in a subdirectory, add it here
+  $css = get_bloginfo('template_directory') . '/bei_style.css';
   
   // scripts and styles to be added to the header - 'activate' will ensure this stuff is 
   // only added to pages it needs to be added to
@@ -36,6 +38,7 @@ function enqueue_back_end_header() {
   $header .= '});' . "\n";
   $header .= '</script>' . "\n";   
   $header .= '<link rel="stylesheet" href="' . $pluginloc . 'css/style.css" />' . "\n";
+  if(file_exists($css_file)) $header .= '<link rel="stylesheet" href="' . $css . '" />' . "\n";
   $header .= '<!--/end back end instructions -->' . "\n\n";
   
   if($activate == 'activate') echo $header; // don't insert the header junk if it's not needed
