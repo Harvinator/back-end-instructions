@@ -3,7 +3,7 @@ Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.0
-Tested up to: 3.1.1
+Tested up to: 3.1.2
 Stable tag: 0.8
 
 Plugin for developers of WordPress to provide easy back-end instructions to their clients - using text, video, audio - whatever.

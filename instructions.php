@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 0.7
+Version: 0.8
 Author URI: http://brassblogs.com
 License: GPL2
 
