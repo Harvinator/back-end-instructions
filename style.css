@@ -1,0 +1,84 @@
+#bei-screen-meta {
+	display:none;
+	position:relative;
+	margin:0 15px 0 5px;
+	border-width:0 1px 1px;
+	border-style:none solid solid;
+	background-color:#f1f1f1;
+	border-color:#ccc;
+	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.05);
+	box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+#bei-screen-meta, #bei-link-wrap {
+	-webkit-border-bottom-left-radius:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-left-radius:3px;
+	border-bottom-right-radius:3px;
+}
+
+#bei-screen-options-wrap {
+	margin:0;
+	padding:8px 20px 12px;
+	position:relative;
+	overflow:auto;
+}
+
+#bei-screen-meta-links {
+	margin:0 24px 0 0;
+}
+
+#bei-screen-meta-links a {
+	text-decoration:none;
+	z-index:1;
+	padding:0 16px 0 6px;
+	height:22px;
+	line-height:22px;
+	font-size:12px;
+	display:block;
+	text-shadow:rgba(255,255,255,0.7) 0 1px 0;
+	color:#777;
+	background:transparent url(../../../wp-admin/images/arrows.png) no-repeat right 3px;
+}
+
+#bei-screen-meta-links a:hover {
+	color:#000;
+}
+
+#bei-screen-meta-links a.screen-meta-active {
+	background-position: right -33px;
+}
+
+#bei-link-wrap {
+	position:absolute;
+	right:197px;
+	height:22px;
+	padding:0;
+	margin:0 0 0 6px;
+	font-family:sans-serif;
+	background-color:#e3e3e3;
+	border-right:1px solid transparent;
+	border-left:1px solid transparent;
+	border-bottom:1px solid transparent;
+	background-image:-ms-linear-gradient(bottom,#dfdfdf,#f1f1f1);
+	background-image:-moz-linear-gradient(bottom,#dfdfdf,#f1f1f1);
+	background-image:-o-linear-gradient(bottom,#dfdfdf,#f1f1f1);
+	background-image:-webkit-gradient(linear,left bottom,left top,from(#dfdfdf),to(#f1f1f1));
+	background-image:-webkit-linear-gradient(bottom,#dfdfdf,#f1f1f1);
+	background-image:linear-gradient(bottom,#dfdfdf,#f1f1f1);
+}
+
+#bei-link-wrap.screen-meta-active a {
+	background-position: right -33px;
+}
+
+.screen-meta-hide {
+	display:none;
+}
+
+.html5-video {
+	width:640px;
+	height:366px;
+	background:#000;
+}
+	

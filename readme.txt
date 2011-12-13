@@ -1,12 +1,12 @@
-=== Back-End Instructions ===
+=== Plugin Name ===
 Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.0
+Stable tag: 1.1
 
-Plugin for developers of WordPress to provide easy back-end instructions to their clients - using text, video, audio - whatever.
+Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
 
 == Description ==
 
@@ -17,10 +17,6 @@ I've found this is typically because most clients want instructions that appear 
 This plugin solves the issue.  Now there can be no more excuses for not finding the answers you've already supplied for them *ad nauseum*.
 
 = Features =
-Using WordPress' default posting capabilities, mixed in with some custom post types and meta fields (and a little sprinkle of magic fairy dust and a lot of prayers), you can easily create and manage instructions for each page of the back-end of your client's site. Simply create a post, associate the post with a page in the back-end, add in your content, and *voil&agrave;*: a small button appears at the top of the page that expands with jQuery to show a list of "instructables" (post title links) associated with that page.  
-
-Features include:
-
 1. The ability to provide a small excerpt to describe what each "instructable" contains within.
 2. Click the link title, and the "instructable" expands to display the content.
     - Content can be a written list of instructions, or some other form of media.
@@ -28,8 +24,7 @@ Features include:
 3. Only Administrators and Editors can gain access to edit/create the "instructables" - lower levels will only see them. 
 4. You can set what end user level can view which instructions. For example, you don't want an Author to see the same instructions for "Edit Posts" that an Administrator would see - it would confuse them. So you can also create content and serve up specific information based on the user level, if you so desire. 
 
-Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I find it useful to make videos specific to the lowest level first, and then build onto that base as you go up the user-level chain of command.
-
+Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I find it useful to make videos specific to the lowest level first, and then build onto that base as you go up the user-level chain of command. 
 
 == Installation ==
 
@@ -73,9 +68,8 @@ So let's start with "Add New."
    If you're not using .swf files, YouTube or Vimeo - or you'd just rather only use the content area for whatever reason - then simply use the embed code provided from the location you want (most video places have embed code they let you use) and pop that into the main content area (not this sidebar field) and it'll work just fine.  Just make sure you're using the HTML editor, not the Visual editor, when you do this to help with any issues that might arise from adding in embed code.
    
    **User Level.** If you'd like particular instructions to show up certain user levels, you can choose an option here.   For example, Admins usually have more menu options to choose from than Authors.  You can add "extra info" for admins so they understand the items related to their role, but lower levels won't see those instructions. If you leave the option blank, any logged in user at any level will see the instructable.
-   
- 
-== Frequently Asked Questions ==  
+
+== Frequently Asked Questions ==
 
 = How do you pull these posts into the front end of the site? =
 Short answer: you don't.
@@ -105,20 +99,14 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 = Known Issues = 
 None at this time.
 
-
-
 == Screenshots ==
+none.
 
-*Showing an example of the custom post type interface for the backend instructions. You can see the tab in the upper left-hand side to show/hide the instruction for this page.*
-[Screenshot1](http://brassblogs.com/plugins/bei/bei1.png "Back End Instructions")
-
-*When you click the table, it expands to show the list of instructions associated with this page.*
-[Screenshot2](http://brassblogs.com/plugins/bei/bei3.png "Back End Instructions")
-
-*You can expand the instruction further to show the video content.*
-[Screenshot3](http://brassblogs.com/plugins/bei/bei2.png "Back End Instructions")
 
 == Changelog ==
+
+= 1.1 =
+This is an "idiot's release" - I committed changed before I was supposed to - and committing uncovered bugs I didn't forsee.  Totally my bad!
 
 = 1.0 =
 * updated code to streamline and make it more efficient.
@@ -166,10 +154,12 @@ d code
 = 0.1 = 
 * First release.
 
+== Upgrade Notice ==
+
+= 1.0 =
+Fixed some bugs, streamlined code, added HTML5 video capabilities.
 
 == Credits, Thank-Yous, Support Information, etc. ==
-
-[JWPlayer](http://www.longtailvideo.com/) (for playing the Flash Video) is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License: http://creativecommons.org/licenses/by-nc-sa/3.0/ 
 
 If you have any questions, comments or suggestions for improvement, feel free to contact Shelly at [Brass Blogs Web Design](http://brassblogs.com "Web Design in Hartford, Farmington Valley, Granby, Avon, Simsbury, Weatogue CT"). If you prefer Twitter, I'm [@brassblogs](http://twitter.com/brassblogs).
 
