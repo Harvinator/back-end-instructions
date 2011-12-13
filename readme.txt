@@ -61,7 +61,7 @@ So let's start with "Add New."
    
    *There is, of course, no guarantee that this will work on ALL non-default pages out there - i.e. anything added by custom functions or other plugins, but generally, it should.*
    
-	**Video URL.** Here is where the video magic happens. If you'd like to post a YouTube, BlipTV, or Vimeo video as your instructable, then grab the URL of the YouTube, BlipTV, or Vimeo page for that video and pop it in here.  The plugin is set to rewrite the URL so that the video will play correctly. 
+	**Video URL.** Here is where the video magic happens. If you'd like to post a YouTube or Vimeo video as your instructable, then grab the URL of the YouTube or Vimeo page for that video and pop it in here.  The plugin is set to rewrite the URL so that the video will play correctly. 
    
    If you're using a self-hosted SWF file, then you need to enter in the full path to the video you want to use. So if you've uploaded an SWF file to your Media Library, and want to use that, then select the File URL and copy it, then paste it into the field. If there are .swf files out there on the internet, and you have the URL to grab the file directly, it should work to place that in the field as well.  
    
