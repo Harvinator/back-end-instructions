@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Back End Instructions ===
 Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
