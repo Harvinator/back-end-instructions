@@ -4,7 +4,7 @@ Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
 Tested up to: 3.4.1
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -120,9 +120,6 @@ I do not.
 
 Believe me, I've thought about it. But there's two reasons that I haven't done it yet... 1) it takes up a lot of time that I don't have at the moment, and I'd really have to soleley dedicate a few days to creating all of those videos. I deliver this plugin for free (because I love you all), but I do have to put food on the table, so client work takes precedence. 2) WordPress is upgraded quite often, and many times, the administrative area changes, so the videos are quickly outdated.  So along with reason #1, I'd have to take off time every time WordPress is upgraded. Which I wouldn't mind doing if I could! 
 
-However, as of version 2.0, I have included some basic videos that are from WordPress.tv - which is quite often updated and contains terrific information.
-
-There's a third reason too, but not so much a big deal I guess - my recorded voice sounds like a 12-year-old.  I've had telemarketers ask me if my mommy was home many times.  Voices like that are annoying.  So I'm sparing you the pain.
 
 = Any other questions? =
 
@@ -150,6 +147,9 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 2.1 =
+* some commits didn't take - partial upgrade. Trying again to get all the right files in there.
 
 = 2.0 =
 * Further streamlined and updated code, removed unnecessary stuff. This makes this version of the plugin unusable for Wordpress versions below 3.1.
