@@ -2,11 +2,13 @@
 Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
-Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 1.1
+Requires at least: 3.1
+Tested up to: 3.4.1
+Stable tag: 2.0
+License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
+
 
 == Description ==
 
@@ -16,97 +18,153 @@ I've found this is typically because most clients want instructions that appear 
 
 This plugin solves the issue.  Now there can be no more excuses for not finding the answers you've already supplied for them *ad nauseum*.
 
+
 = Features =
-1. The ability to provide a small excerpt to describe what each "instructable" contains within.
-2. Click the link title, and the "instructable" expands to display the content.
+
+1. Version 2.0 now uses hooks to plug itself into the "Help" tab, so no extra buttons are necessary, and the location of the "Instructions" is more intuitive.
+2. Due to popular demand, I've added in a new feature where you can add a single instruction to multiple pages. 
+3. Choose the tab (named by your post title), and the "instructable" displays the content.
     - Content can be a written list of instructions, or some other form of media.
     - Content can be anything you like, and you can use it just like you would any other post - the only difference is, this stuff shows up in the back-end.
-3. Only Administrators and Editors can gain access to edit/create the "instructables" - lower levels will only see them. 
-4. You can set what end user level can view which instructions. For example, you don't want an Author to see the same instructions for "Edit Posts" that an Administrator would see - it would confuse them. So you can also create content and serve up specific information based on the user level, if you so desire. 
+4. A new options page will allow you to set what user level can add/edit/delete "instructables", as well as allow you to choose whether or not to make the instructions viewable from the front end. You can also choose to make front-end "instructables" viewable to the public, or only to logged-in users (a message will display in place of the content if you want to restrict it to logged-in users).  You can also give non-logged-in users "capabilities" to restrict what they see.
+5. You can set what end user level can view which instructions. For example, you don't want an Author to see the same instructions for "Edit Posts" that an Administrator would see - it would confuse them. So you can also create content and serve up specific information based on the user level, if you so desire. 
 
-Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I find it useful to make videos specific to the lowest level first, and then build onto that base as you go up the user-level chain of command. 
+Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I recommend making videos/content specific to the lowest level first, and then build onto that base as you go up the user-level chain of command. 
+
 
 == Installation ==
 
-Installation is simple, and adds nothing more to your database than an small option (to check that it's ever been installed so the initial post won't keep re-creating itself), and the content you create. 
+Installation is simple, and adds nothing more to your database than an options and the content you create. 
 
 1. Unzip the package.
 2. The contents of the package should look like so:
 	- back-end-instructions (folder)
 	  - bei_languages (folder)
-	  - bei_style.css (file)
+	  - &nbsp; &nbsp; back-end-instructions.pot (file)
 	  - instructions.php (file)
+	  - mytheme (folder)
+	  - &nbsp; &nbsp; archive-instructions.php (file)	
+	  - &nbsp; &nbsp; single-instructions.php (file) 
+	  - &nbsp; &nbsp; bei_style.css (file)
 	  - player.swf (file)
 	  - readme.txt (file)
 	  - style.css (file)	
 3. Upload the back-end-instructions folder (and all of its contents) to the "plugins" directory of your WordPress installation.
 4. Activate the plugin through the "Plugins" menu in WordPress.
-6. All done! And additional note: if you want to customize the CSS for how the instructions appear, then move (or copy) the "bei_style.css" file into your theme, at the same level as your theme's "style.css" file. Style away!
+6. All done! 
+
 
 = How to Use =
 
-All of your work will be done in the new Custom Post Type that will be set up for you, so look in the left sidebar for the "Instructions" panel (found just below "Comments", provided no other plugin also has additions here!). As with writing posts, you'll have the option of editing a previously-created instruction (which you shouldn't have any, save the initial example created), or adding a new one. 
+All of your work will be done in the new Custom Post Type that will be set up for you, so look in the left sidebar for the "Instructions" panel (found just below "Posts"). As with writing posts, you'll have the option of editing a previously-created instruction (which you shouldn't have any, save the initial example created), or adding a new one. 
 
 So let's start with "Add New."
 
-1. **Give it a meaningful, but short, title.**  You want to give the title something with meaning, but keep it short and sweet.  3 or 4 words at the most should do it.
+1. **Give it a meaningful, but short, title.**  You want to give the title something with meaning, but keep it short and sweet.  3 or 4 words at the most should do it. Keep in mind that this title will be the "link" for the tab that contains the actual instruction content, so don't go crazy.
 
-2. **Add in your content.** Place your actual instructions here.  You can write text-based instructions, or add in audio or video files via normal posting methods. YouTube, Vimeo, and self-hosted videos can be added in the sidebar by just entering the full URL to the video in question (for Vimeo and YouTube, just copy the URL in the address bar. For self-hosted, copy the File URL for the media file in your Media Library; or if it's uploaded to some directory on your server, put in the correct path to the file.)
+2. **Add in your content.** Place your actual instructions here.  You can write text-based instructions, or add in images, audio, or video files via normal posting methods.  If you'd like easier methods of adding video, you can simply place the full URL path to the video into the "Video" in the sidebar meta box - it will auto-format video for you, and display it above your post content. (This only works for MP4 videos,  Vimeo, and YouTube.) Note, this new addition is by request: many people didn't like that the "Video" sidebar metabox *replaced* the content.  So now it's added to, and displayed above, the content.
 
-3. **Add in an excerpt, if desired.**  The excerpt would be a good spot to give a small description of what's going on in this post.  The plugin is set to show an excerpt here, but not content - so if you leave this empty, the end user will just rely on the title.
+3. **Add in an excerpt, if desired.**  The excerpt would be a good spot to give a small description of what's going on in this post. I find it very useful to place timestamps (and a small description of what you find at each timestamp) in the excerpt section.  Whatever you place in the excerpt area will show up below the content.
 
-4. **Instruction Page Information** In the right sidebar, at the bottom, will be this section.
+4. **Regarding Shortcodes ** Several people have asked me, in the past, to make it possible to write shortcodes without having them parsed, so people can give examples of how to write and use the shortcodes.  The good thing about moving the shortcodes into the help menu is that the help menu is meant for static text only, and shortcodes are completely stripped.  I've provided a method for putting shortcode content in the instructional post without having it stripped, and without parsing the information.  Simply replace the "[" and "]" with "{{" and "}}".  Your shortcodes will display (not be parsed) so you can teach people whow to use them.  
 
-	**Page Name.** Enter in what page you want this to appear on. You can find the page name at the end of the URL in your address bar. As of Version 0.8, you may now pick and choose what pages you'd like the instruction to appear on. Using the url *"http://yoursitename/wp-admin/post-new.php?post_type=photos"* as an example, let's say you want to write an instruction on how to write a new post. If you want this instruction to appear ONLY on the "Add New" page in the custom post type ("photos" in this case), then you just copy everything in the URL after the last "/" (which, in this example, would be *"post-new.php?post_type=photos"*) and put it in the "Page Name" field.  However, if you'd like this same instruction to appear on the "Add Post" page on *any* post type (even under the "Posts > Add New" section for default WordPress posts), the copy everything after the last "/" but before the "?" (in this example: *"post-new.php"*) and paste it into this field.  The only exception to this is if you want stuff to how up on the Dashboard.  In that case, all you need to write is "dashboard".  
+	*NOTE* On the front end of the site, the shortcodes WILL be parsed. For example: {{gallery}} will actually work exactly like [gallery] when viewing on the front end, and display your gallery of images; but {{gallery}} will display [gallery] on the back end.
+
+5. **Instruction Page Information** In the right sidebar, at the bottom, will be this section.
+
+	**Page Name.** Enter in what page you want this to appear on. You can find the page name at the end of the URL in your address bar. For example, let's say you want to write an instruction on how to write a new post. The URL for adding a new post is typically something like *"http://yoursitename/wp-admin/post-new.php?post_type=photos"*.  If you want this instruction to appear ONLY on the "Add New" page in the custom post type ("photos" in this case), then you just copy everything in the URL after the last "/" (which, in this example, would be *"post-new.php?post_type=photos"*) and put it in the "Page Name" field.  However, if you'd like this same instruction to appear on the "Add Post" page on *any* post type (even under the "Posts > Add New" section for default WordPress posts), the copy everything after the last "/" but before the "?" (in this example: *"post-new.php"*) and paste it into this field.  The only exception to this is if you want stuff to how up on the Dashboard.  In that case, all you need to write is "dashboard".  There is also an option to set additional pages, if you like.  Just click the "+" button to add multiple fields - each one is where you'll enter the page name - same method as above.
    
-   *There is, of course, no guarantee that this will work on ALL non-default pages out there - i.e. anything added by custom functions or other plugins, but generally, it should.*
+   	*There is, of course, no guarantee that this will work on ALL non-default pages out there - i.e. anything added by custom functions or other plugins, but generally, it should.*
    
-	**Video URL.** Here is where the video magic happens. If you'd like to post a YouTube or Vimeo video as your instructable, then grab the URL of the YouTube or Vimeo page for that video and pop it in here.  The plugin is set to rewrite the URL so that the video will play correctly. 
+	**Videos** Here is where the video magic happens. If you'd like to post an MP4, YouTube, or Vimeo video as your instructable, then grab the URL of the YouTube or Vimeo page (or the full path to the MP4 file) for that video and pop it in here. This video will display above the content you write.  Further information below:
+
+   	**Vimeo or YouTube**  If you're on a page at youtube.com or vimeo.com, and you want to use the video on that page within an instruction, just copy the URL of the page and paste it in the "Video URL" field.  Alternatively, you can simply copy the video embed code that these sites provide for you, and paste it within the post content area. (Just be sure you're using the HTML tab when you do that - the Visual editor messes with things a bit.) This, of course, works for any system that provides embed code to paste video on your site - you're not restricted to Vimeo or YouTube.
    
-   If you're using a self-hosted SWF file, then you need to enter in the full path to the video you want to use. So if you've uploaded an SWF file to your Media Library, and want to use that, then select the File URL and copy it, then paste it into the field. If there are .swf files out there on the internet, and you have the URL to grab the file directly, it should work to place that in the field as well.  
+   	**MP4/OGV files** The only note here is, if you do use MP4 files, I HIGHLY recommend creating an .ogv version of the same file, because some browsers cannot play MP4 files ::coughFirefoxcough:: so the .ogv file is kinda necessary.  So if you use MP4, I'd say you also MUST create an OGV version and upload that to your server alongside the MP4.  Don't worry though, it's easy.  I'll even give you a link to a [free video converter](http://www.mirovideoconverter.com/) so you can do that.  Be sure the OGV and MP4 files have the exact same name, down to the case.
    
-   If you're not using .swf files, YouTube or Vimeo - or you'd just rather only use the content area for whatever reason - then simply use the embed code provided from the location you want (most video places have embed code they let you use) and pop that into the main content area (not this sidebar field) and it'll work just fine.  Just make sure you're using the HTML editor, not the Visual editor, when you do this to help with any issues that might arise from adding in embed code.
+   	**SWF Files** If you're using a self-hosted SWF file, or you have the URL to an SWF file, then you need to enter in the full path to the SWF file into the "Video URL" field.  
    
-   **User Level.** If you'd like particular instructions to show up certain user levels, you can choose an option here.   For example, Admins usually have more menu options to choose from than Authors.  You can add "extra info" for admins so they understand the items related to their role, but lower levels won't see those instructions. If you leave the option blank, any logged in user at any level will see the instructable.
+   	**User Level** If you'd like particular instructions to show up certain user levels, you can choose an option here.   For example, Admins usually have more menu options to choose from than Authors.  You can add "extra info" for admins so they understand the items related to their role, but lower levels won't see those instructions. If you leave the option blank, any logged in user at any level will see the instructable.
+   	
+6. **Settings** In the right sidebar, under "Settings > Back End Instructions", you'll find the settings page for the instructions defaults.
+
+	**Default Admin Level** This is the lowest user level you'd like to have access to create and edit Instructions.  The lowest level you can choose is "Author" ("Contributor" and "Subscriber" are just asking for trouble, so they are not options. "Author" is pushing it, but I leave it there anyway, because I can see instances where that would be helpful.)  This setting does not give permissions that the user level doesn't already have.  For example, if you set the level to "Author", then the authors of your site can write, edit and publish instructions, but it doesn't give them any extra capabilities like activating plugins and such.
+	
+	**Show in Front?** If you'd like to make your instructions visible on the front end, set this to "yes".  If it's the first time you're doing this, you WILL need to redo your permalinks. (All you have to do is go to your permalinks settings and hit the "save changes" button.)  If you swap this option back and forth, it may throw the system for a loop, so just try re-saving your permalinks again to see if that clears things up.
+	
+	**Logged-in users only?**  This goes with the above option.  By default, if the instructions are visible on the front end of the site, then end users are required to be logged in to see them (otherwise, they get a prompt to log in before viewing).  But you can set it so the general public can see them if you want.  The next option will help make things a bit more "private" for random visitors if you opt to make them visible to 100% of the population.
+	
+	**Default Viewing Level** This goes with the previous two options.  If you have "Show in Front?" set to "Yes", and "Logged-in users only?" set to "no" (thus making them publicly viewable) you can set this option to give the general public capability status.  (Don't worry, it's faked, and only for this plugin.  They won't *actually* have any capabilities!) Basically, this setting will treat random visitors as if they do have a logged-in status - this dropdown lets you choose what level they are at.  By default, it's "contributor", so anyone swinging by will be able to read posts marked for Subscribers and Contributors; but posts marked for Authors, Editors, Admins, and Super-Admins will be hidden.
+	
+7. **Other Front End Viewing Options** 
+
+	**Theme Files** You've had a CSS file available for you to use since version 0.8, but now you also have two theme files - archive-instructions.php and single-instructions.php - for you to use if you enable front-end viewing.  Simply copy these files and paste them into the theme folder youre using.  The files are basic Twenty Eleven copies, with a bit of necessary code stuck in there to take your settings into account.  You can edit them to match your theme as you please.  Just be sure you move these files to your current them, or any upgrade you make will overwrite whatever changes you've made.
+
 
 == Frequently Asked Questions ==
 
 = How do you pull these posts into the front end of the site? =
-Short answer: you don't.
+As of version 2.0 - due to the numerous requests I've gotten, you can now show them on the front-end of the site if you so desire.  Under "Settings > Back End Instructions", you may now choose to display the instructions on the front end of the site, as well as choose to keep them private (i.e. open them up to the public, or make a user log in before viewing).  See the "How to Use" section for further instructions.
 
-This plugin is for showing these custom posts in the back end of the site, in the administrative area (thus the name of the plugin). The reason I did it this way is because when your client is logged in to the back end of the site, s/he can manage the site content and s/he will be in one single spot and can easily read their instructions without having to flip back and forth between an instructions page and what they are trying to do. The content pages of this plugin are not meant to be displayed on the front-end of the site. It negates the entire purpose of the plugin.  If you want a plugin that will pull these posts into the front end of the site, then you're looking for a different plugin.
+**PLEASE NOTE**
 
-Not to say that you ==can't== do it. Sure you can - it's just a custom post type, and you can use queries to pull the information into your theme files and display them on the front end.  But since I didn't write this plugin for that purpose, you have to figure out how to do that on your own. There's already lots of tutorials and plugins out there that will do that (and even do it out of the box). I'd recommend making life easier on yourself and go looking for those, and bypass this one.
+This plugin was created to show these custom posts in the *back end* of the site, in the administrative area (thus the name of the plugin). The reason I did it this way is because when your client is logged in to the back end of the site, s/he can manage the site content and s/he will be in one single spot and can easily read their instructions without having to flip back and forth between an instructions page and what they are trying to do. The content pages of this plugin were not originally meant to be displayed on the front-end of the site. IMO, it negates the entire purpose of the plugin.  If you are looking for a plugin that will create custom post types for you to use on your site, then you're looking for a different plugin.
+
+But due to numerous requests, I have enabled this capability.  I would imagine it's because you want to be able to see your instruction to see how it's formatted, etc., for editing purposes. (Or perhaps you just want your clients to stay out of the back end, for whatever reason.)  But know that the instructions you view on the front end of your site WILL NOT look like the instructions seen on the back-end, because the ones seen on the front end will use your theme's styling, which the back-end uses the admin styling.  
+
+Again, I state: if you are simply looking for a plugin to set up a custom post type that you use on the front end of the site, this is NOT the plugin you want.  It was not designed for that purpose, and frankly, it never will be.
 
 = Do you have any video content that is already created for the basic WordPress stuff? =
+
 I do not.
 
-Believe me, I've thought about it. But there's two reasons that I haven't done it yet... 1) it takes up a lot of time that I don't have at the moment, and I'd really have to soleley dedicate a few days to creating all of those videos. I deliver this plugin for free (because I love you all), but I do have to put food on the table, so client work takes precedence. 2) WordPress is upgraded quite often, and many times, the administrative area changes, so the videos are quickly outdated.  So along with reason #1, I'd have to take off time every time WordPress is upgraded. Which I wouldn't mind doing... if I had the time to do it. 
+Believe me, I've thought about it. But there's two reasons that I haven't done it yet... 1) it takes up a lot of time that I don't have at the moment, and I'd really have to soleley dedicate a few days to creating all of those videos. I deliver this plugin for free (because I love you all), but I do have to put food on the table, so client work takes precedence. 2) WordPress is upgraded quite often, and many times, the administrative area changes, so the videos are quickly outdated.  So along with reason #1, I'd have to take off time every time WordPress is upgraded. Which I wouldn't mind doing if I could! 
+
+However, as of version 2.0, I have included some basic videos that are from WordPress.tv - which is quite often updated and contains terrific information.
 
 There's a third reason too, but not so much a big deal I guess - my recorded voice sounds like a 12-year-old.  I've had telemarketers ask me if my mommy was home many times.  Voices like that are annoying.  So I'm sparing you the pain.
 
 = Any other questions? =
+
 By all means, feel free to ask away.  I'd also love input on features you'd like added or things you'd like to see to improve this plugin.  See the "Credit" information on how to contact me.
+
 
 = Notes = 
 
 1. This plugin uses custom post types to create the content for it.  If you decide you no longer wish to use this plugin, you need to decide what you'd like to do with the content.  If you want it completely removed from the database, then before you uninstall it, you need to go to "Instructions" and check the box to "Move to Trash", and then "Apply." Then you need to go the the trash and empty it to be sure the posts are completely removed from your database - THEN uninstall the plugin. If you want to keep the content as regular posts, then you will either manually have to edit your MySQL backup to change them from "instructions" to "post" (just open the database backup in a plain-text editor do a find/replace, save, and re-import), or use a plugin like [Post Type Switcher](http://wordpress.org/extend/plugins/post-type-switcher/) to handle that for you before you uninstall. Otherwise, it'll all just stay there and hang out, with no way to see it until you re-install the plugin again, or code your theme to pull the content out of the database to display it on the front end.
 
-2. I've had lots of requests for "how to style" the Instructions.  There's a CSS file that has very, very basic styles (I hate it when people push their own layout ideas on me, so I try not to do it to you!) for the plugin, but I've had requests for easier methods of styling. Having the CSS file (and editing the one included) means that every time you upgrade, you have to save that file elsewhere or lose it. So now we have an easier method. Create a file named "bei_style.css" and pop in into your theme directory, at the same level your style.css file is located. The plugin will now look for that file.  If it's found, it will apply that stylesheet to the plugin. Now when you upgrade, you don't have to worry about your styles being overwritten, and they will coincide with your theme.
+2. If you're in the mood to translate, please feel free to do so.  I've created a base .pot file in the "back-end-instructions/bei-languages" folder.  You can use [POEdit](http://www.poedit.net/) to create the new file - just be sure to keep the proper Wordpress language file naming conventions in mind.  (in other words, if you create a Spanish translation, the file name should be "back-end-instructions-es-ES.mo"
 
-3. If you're in the mood to translate, you can "turn on" the capability within the bei_functions.php file, at the top.  I've tried to make it as easy as possible for this to happen, but if I've missed something, please let me know. I'm not very good at making plugins "translatable", but I do my best. I can't guarantee what I've done is the best out there - so if you're better at translating that I am, please - have at it.
 
 = Known Issues = 
-None at this time.
+
+* Bug with swapping instructions that contain playing videos.  If you change tabs, the video of the previously-opened tab will continue to play in the background.  So you have to be sure to stop the video before you change tabs. If you're a guru at jQuery, and feel like you might know the solution, my sad attempts at solving this problem lie at (commented) lines 186-210 in the instructions.php file.  Have at it! In the meantime, I'll still be plugging away, trying to sort this out.
+* It's still not clear if this works with multi-site.  I have a few reports that say it doesn't - but I have many, many more that say it does.  That's on my to-do list for thenext release - to verify/make sure it works on multi-site.
+
 
 == Screenshots ==
-none.
+
+1. Example of the Back End Instructions page.
+2. A view of the edit.php page (where an instruction will show) with the instruction expanded under the "Help" tab.
+3. Close-up view of the ability to add an instruction to multiple pages on the back end.
 
 
 == Changelog ==
 
+= 2.0 =
+* Further streamlined and updated code, removed unnecessary stuff. This makes this version of the plugin unusable for Wordpress versions below 3.1.
+* Created options page for defaults
+* Can now provide shortcode instructions without parsing the shortcode.
+* Set up an option to allow you to display instructions on front end.
+* Set up an secondary option to make instructions that are shown on the front-end visible to everyone (public) or only to logged-in users (private).
+* Fixed the translation stuff by creating .pot file for easier translation, removed default .mo and .po files.
+* added capability for popping in an instruction to a list of specified pages.
+* edited the output in regards to the video: you can now show video AND text, instead of having the video replace the text.
+* updated/cleaned up readme.txt file.
+* created a banner for the plugins page (just for fun)
+
 = 1.1 =
-This is an "idiot's release" - I committed changed before I was supposed to - and committing uncovered bugs I didn't forsee.  Totally my bad!
+This is an "idiot's release" - I committed changes before I was supposed to - and committing uncovered bugs I didn't forsee.  Totally my bad!
 
 = 1.0 =
 * updated code to streamline and make it more efficient.
@@ -159,8 +217,8 @@ d code
 = 1.0 =
 Fixed some bugs, streamlined code, added HTML5 video capabilities.
 
-== Credits, Thank-Yous, Support Information, etc. ==
+== Other Notes ==
 
-If you have any questions, comments or suggestions for improvement, feel free to contact Shelly at [Brass Blogs Web Design](http://brassblogs.com "Web Design in Hartford, Farmington Valley, Granby, Avon, Simsbury, Weatogue CT"). If you prefer Twitter, I'm [@brassblogs](http://twitter.com/brassblogs).
+If you have any questions, comments or suggestions for improvement, feel free to contact Shelly at [Brass Blogs Web Design](http://brassblogs.com/contact "Web Design in Hartford, Farmington Valley, Granby, Avon, Simsbury, Weatogue CT"). If you prefer Twitter, I'm [@brassblogs](http://twitter.com/brassblogs).
 
-Given that this is free, I offer limited support. Pretty much if you have issues with the plugin *working* I will do whatever I can to help you fix the issue, but when it comes to customizations, I'm in limited supply.  I'll do what I can, but no guarantees.  Pretty much your standard "AS IS" application.  In all honesty, ask customization questions in the forums - if I can't help, perhaps someone else can.  (If you want to hire me to customize it, that's another story - feel free to contact me to do so!)
+Given that this is free, I offer limited support. Pretty much if you have issues with the plugin *working* I will do whatever I can to help you fix the issue, but when it comes to customizations, I'm in limited supply.  I'll do what I can, but no guarantees.  Pretty much your standard "as-is" application.  In all honesty, ask customization questions in the forums - if I can't help, perhaps someone else can.  (If you want to hire me to customize it, that's another story - feel free to contact me to do so!)
