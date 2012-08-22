@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.1
+Version: 2.2
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -152,73 +152,6 @@ function bei_create_instructions_management() {
 	}
 }
 
-
-add_action('admin_head', 'bei_enqueue_back_end_header'); 									// adds the script to the header
-function bei_enqueue_back_end_header() { 													// adding stuff to the header
-  global $pluginloc, $typenow; 
-  wp_enqueue_script('jquery');																// scripts and styles to be added to the header - 
-  if($typenow == 'instructions') $activate = true;											// 'activate' will ensure this stuff is 
-  																							// only added to pages it needs to be added to
-  $css_file = WP_CONTENT_DIR . '/themes/' . get_template() . '/bei_style.css'; 				// if your styles are in a subdirectory, add it here
-   
-  $header  = "\n" . '<!-- back end instructions -->' . "\n"; ?>
-   
-  <script type="text/javascript">
-  			jQuery(document).ready(function($) { 
-  				// add dynamic fields for "Page Name" meta box
-  				var scntDiv = $('.more_fields');
-  				var i = $('.more_fields').size() + 1;
-  				
-  				$('.add_field').live('click', function() {
-  					$('<p><strong style="display:inline-block; width:26px; text-align:right; margin-right:8px;"><a href="#" class="add_field" style="text-decoration:none; color:#666; font-style:normal;">+</a></strong><input type="text" name="multi[]" value="" style="width:170px; margin-right:5px;" /><a href="#" class="remove" style="font-style:normal; text-decoration:none; font-size:0.8em; color:#666;">remove</a></p>').appendTo(scntDiv);
-  					i++;
-  					return false;
-  				});
-  				
-  				$('.remove').live('click', function() { 
-                	if( i > 2 ) {
-                        $(this).parents('p').remove();
-                        i--;
-                	}
-                return false;
-        		}); 
-        		
-        		/* Still trying to get the "stop video playback when tab is swtiched" issue fixed.
-        		   These are my terrible, terrible attempts at solving this problem.
-        		   
-        		// stop video playback when div is hidden
-        		// this one actually doesn't work because you can't clone this way. but I'm leaving it here for reference
-        		// because if you *could* clone this way, this would be a perfect solution.
-				//$('.contextual-help-tabs li').on('click', function(event) {
-    				//var test = $('.contextual-help-tabs-wrap div.active').attr('id'); // gets previously active div ID
-    				//var clone = $('#'+test).clone(true, true);							  // clones the previously active div
-    				//$('#'+test).remove();
-    				//$('#'+test).html(clone);
-				//}); 
-				
-				// this one is actually the one I'm working on that's causing me to pull out my hair.
-				// for the record, I am now bald.  My eyebrows and eyelashes are now cowering in fear.
-  				$('.contextual-help-tabs li').on('click', function() {
-    				var previously_active = $('.contextual-help-tabs-wrap div.active').attr('id');
-   					var video = $('#'+previously_active).find('*[video]');
-   					//alert(video);   
-    				if(video) {
-        				$('html5-video').each(function(){ 
-            				this.pause();
-        				});
-    				}
-				}); */
-				
-  			});
-  		</script>  
-  		
-<?php 
-  $header .= '<link rel="stylesheet" href="' . $pluginloc . 'style.css" />' . "\n";
-  if(file_exists($css_file)) $header .= '<link rel="stylesheet" href="' . $css . '" />' . "\n";
-  $header .= '<!--/end back end instructions -->' . "\n\n";
-  
-  if($activate == true) echo $header; // don't insert the header junk if it's not needed
-}
 
 // meta information for the instructions posts (custom fields)
 $bei_key = "instructions";
@@ -514,19 +447,32 @@ function bei_create_first_post() { 															// create the initial instruct
 }
 
 
-
 /*-----------------------------------------------------------------------------
 	 Now that we're all done with that, let's make 'em show up!
 -----------------------------------------------------------------------------*/
+function array_find($needle, $haystack) {													// testing function
+	if(strstr($needle, '?') !== false) { 													// check to see if the current page we're on has a "?"
+		$test = explode('?', $needle);
+		$test = $test[0]; 				 													// if it does, get the part before the "?"
+	} else {
+		$test = $needle;				 													// if it doesn't, just use the current page
+	}
+
+	foreach ($haystack as $key=>$item) {
+		if(($item == $test) || ($item == $needle)) return 'found'; 
+	}
+
+	return false; 
+}
 
 add_action('load-'.$pagenow, 'add_bei_instructions_button');
 function add_bei_instructions_button() {
 	global $current_user, $user_level, $post, $pagenow, $endofurl, $class, $address, $pluginloc, $options;
 	
 	$screen = get_current_screen();
-	$this_screen = $screen->base; 															// get current screen's filename, sans extension
-	if($pagenow == 'index.php') $pagenow = 'dashboard'; 									// test for dashboard
-	
+	$this_screen = $screen->base; 
+	$help_tab_content = array(); 															// set up the help tab content														
+
 	$address = array_reverse(explode('/', $address));										// reverse the current URL
     $address = $address[0];																	// grab the last URL bit (the page we're on)
 	
@@ -557,7 +503,9 @@ function add_bei_instructions_button() {
     		
     		$multi[] = $page;																// add pages to the array to search against
 
-    		if(array_search($address, $multi, true) === FALSE) continue;					// if the current page isn't in the array, skip it	
+			$find = array_find($address, $multi);
+
+			if($find != 'found') continue;													// if the current page isn't in the array, skip it	
 
 			if(current_user_can($level)) :
 				$post_info = get_post($post);												// get the post

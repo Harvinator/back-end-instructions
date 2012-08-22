@@ -3,8 +3,8 @@ Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
-Tested up to: 3.4.1
-Stable tag: 2.1
+Tested up to: 3.5
+Stable tag: 2.2
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -30,6 +30,7 @@ This plugin solves the issue.  Now there can be no more excuses for not finding 
 5. You can set what end user level can view which instructions. For example, you don't want an Author to see the same instructions for "Edit Posts" that an Administrator would see - it would confuse them. So you can also create content and serve up specific information based on the user level, if you so desire. 
 
 Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I recommend making videos/content specific to the lowest level first, and then build onto that base as you go up the user-level chain of command. 
+6. Tested (and found ot work) in Multi-Site.
 
 
 == Installation ==
@@ -45,10 +46,8 @@ Installation is simple, and adds nothing more to your database than an options a
 	  - mytheme (folder)
 	  - &nbsp; &nbsp; archive-instructions.php (file)	
 	  - &nbsp; &nbsp; single-instructions.php (file) 
-	  - &nbsp; &nbsp; bei_style.css (file)
 	  - player.swf (file)
-	  - readme.txt (file)
-	  - style.css (file)	
+	  - readme.txt (file)	
 3. Upload the back-end-instructions folder (and all of its contents) to the "plugins" directory of your WordPress installation.
 4. Activate the plugin through the "Plugins" menu in WordPress.
 6. All done! 
@@ -98,7 +97,7 @@ So let's start with "Add New."
 	
 7. **Other Front End Viewing Options** 
 
-	**Theme Files** You've had a CSS file available for you to use since version 0.8, but now you also have two theme files - archive-instructions.php and single-instructions.php - for you to use if you enable front-end viewing.  Simply copy these files and paste them into the theme folder youre using.  The files are basic Twenty Eleven copies, with a bit of necessary code stuck in there to take your settings into account.  You can edit them to match your theme as you please.  Just be sure you move these files to your current them, or any upgrade you make will overwrite whatever changes you've made.
+	**Theme Files** There are two theme files available for you to use - archive-instructions.php and single-instructions.php - if you enable front-end viewing.  Simply copy these files and paste them into the theme folder youre using.  The files are basic Twenty Eleven copies, with a bit of necessary code stuck in there to take your settings into account.  You can edit them to match your theme as you please.  Just be sure you move these files to your current theme, or any upgrade you make will overwrite whatever changes you've made.
 
 
 == Frequently Asked Questions ==
@@ -135,8 +134,7 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 = Known Issues = 
 
-* Bug with swapping instructions that contain playing videos.  If you change tabs, the video of the previously-opened tab will continue to play in the background.  So you have to be sure to stop the video before you change tabs. If you're a guru at jQuery, and feel like you might know the solution, my sad attempts at solving this problem lie at (commented) lines 186-210 in the instructions.php file.  Have at it! In the meantime, I'll still be plugging away, trying to sort this out.
-* It's still not clear if this works with multi-site.  I have a few reports that say it doesn't - but I have many, many more that say it does.  That's on my to-do list for thenext release - to verify/make sure it works on multi-site.
+* Bug with swapping instructions that contain playing videos.  If you change tabs, the video of the previously-opened tab will continue to play in the background.  So you have to be sure to stop the video before you change tabs. If you're a guru at jQuery, and feel like you might know the solution, have at it! In the meantime, I'll still be plugging away, trying to sort this out.
 
 
 == Screenshots ==
@@ -147,6 +145,12 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 2.2 =
+* tested in WordPress 3.5-alpha, minor bug fixes and code cleanup for the upcoming WordPress release.
+* tested in a Multi-Site environment, seems to work fine.  (Please contact me if you find out otherwise, because my tests are only in a localhost environment.)
+* created a now video explaining the plugin, since the old one is outdated.
+* removed stylesheets because they actually aren't necessary anymore
 
 = 2.1 =
 * some commits didn't take - partial upgrade. Trying again to get all the right files in there.
