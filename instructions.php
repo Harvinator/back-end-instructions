@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.2
+Version: 2.3
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -69,7 +69,6 @@ function bei_query_vars($query) {										// be *absolutely sure* these aren't 
     return $query; 														// return the query and perform the search
 }
 add_filter('pre_get_posts', 'bei_query_vars'); 							// Wonder Twin powers, activate!
-
 
 
 /*-----------------------------------------------------------------------------
@@ -216,11 +215,11 @@ $output = '';
 	if($type == 'dropdown') {
 		// set up dropdown names to make 'em pretty on return
 			if($data[$name] == 'manage_networks') $display = __('Super Administrator', 'bei_languages'); 
-			if($data[$name] == 'activate_plugins') $display = __('Administrator', 'bei_languages'); 
-			if($data[$name] == 'edit_others_posts') $display = __('Editor', 'bei_languages'); 
-			if($data[$name] == 'delete_published_posts') $display = __('Author', 'bei_languages'); 
-			if($data[$name] == 'delete_posts') $display = __('Contributor', 'bei_languages'); 
-			if($data[$name] == 'read') $display = __('Subscriber', 'bei_languages'); 
+			if($data[$name] == 'activate_plugins' || $data[$name] == 'administrator' || $data[$name] == 'Administrator') $display = __('Administrator', 'bei_languages'); 
+			if($data[$name] == 'edit_others_posts' || $data[$name] == 'editor'|| $data[$name] == 'Editor') $display = __('Editor', 'bei_languages'); 
+			if($data[$name] == 'delete_published_posts' || $data[$name] == 'author' || $data[$name] == 'Author') $display = __('Author', 'bei_languages'); 
+			if($data[$name] == 'delete_posts' || $data[$name] == 'contributor' || $data[$name] == 'Contributor') $display = __('Contributor', 'bei_languages'); 
+			if($data[$name] == 'read' || $data[$name] == 'subscriber' || $data[$name] == 'Subscriber') $display = __('Subscriber', 'bei_languages'); 
 					
 	  	$output .= '<p style="font-size:1.1em; font-style:normal; "><label for="' . $name . '" style="display:inline-block; width:70px; margin-right:3px; text-align:right; font-size:0.9em; cursor:text">' . $desc . '</label><select name="' . $name . '">' . "\n";
 		if (isset($data[$name])) {
@@ -498,6 +497,12 @@ function add_bei_instructions_button() {
 			$level = $instruction_info[0]['user_level'];									// level that can see this instruction
 			$video = $instruction_info[0]['video_url'];										// video url
 			$vid_id = 'player-' . $post;													// video IDs
+
+			if($level == 'administrator' || $level == 'Administrator') $level = 'activate_plugins';	// replace the old values
+			if($level == 'editor' || $level == 'Editor') $level = 'edit_others_posts';				// so they show up when they're
+			if($level == 'author' || $level == 'Author') $level = 'delete_published_posts';			// supposed to
+			if($level == 'contributor' || $level == 'Contributor') $level = 'delete_posts';
+			if($level == 'subscriber' || $level == 'Subscriber') $level = 'read';
 			
     		if($address == 'index.php' || $address == '') $address = 'dashboard';			// do a little fixin' for the dashboard
     		

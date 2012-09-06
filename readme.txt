@@ -4,7 +4,7 @@ Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -145,6 +145,9 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 2.3 =
+* Discovered an issue where instructions that were created before version 2.2 would not show up anywhere after the upgrade.  My bad.  Variable misnaming.  It's now fixed.
 
 = 2.2 =
 * tested in WordPress 3.5-alpha, minor bug fixes and code cleanup for the upcoming WordPress release.
