@@ -152,7 +152,6 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 = 2.2 =
 * tested in WordPress 3.5-alpha, minor bug fixes and code cleanup for the upcoming WordPress release.
 * tested in a Multi-Site environment, seems to work fine.  (Please contact me if you find out otherwise, because my tests are only in a localhost environment.)
-* created a now video explaining the plugin, since the old one is outdated.
 * removed stylesheets because they actually aren't necessary anymore
 
 = 2.1 =
