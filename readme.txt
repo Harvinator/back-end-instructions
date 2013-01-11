@@ -146,7 +146,7 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 == Changelog ==
 
-= 2.3 =
+= 2.4 =
 * Finally fixed the issue of the Instructions post type not showing up when Wordpress SEO is installed and activated.
 * Fixed issue where radio buttons don't function in settgins page when the Ultimate TinyMCE (by Josh Lobe - tested version 4.0.3, which was the only version I have access to) plugin is used.
 
