@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.3
+Version: 2.4
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -35,7 +35,6 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) 	// prevent
 
 global $current_user, $post;											// globalize
 $pluginloc = dirname( plugin_basename( __FILE__ ) );
-$options = get_option('bei_options'); 									// get options in DB
 $address = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"]; // current page's path
 $addy_parts = explode('/', $address);									// get url parts
 $endofurl = end($addy_parts);											// get the last part of the current url
@@ -47,7 +46,8 @@ if( !function_exists('wp_set_current_user')	) { 						// check to see if pluggab
 
 add_action('admin_init', 'bei_add_instructions_options');				// add the options array if it's not there
 function bei_add_instructions_options() {
-	global $options;
+	$options = get_option('bei_options');
+
 	if(!$options) {
 		$array = array('admin' => 'activate_plugins',					// array for all the options
 					   'public' => 'no',
@@ -87,7 +87,10 @@ function bei_languages_for_translation() {
   
 add_action('init', 'bei_create_instructions_management');
 function bei_create_instructions_management() {
-	global $options, $current_user;
+	global $current_user;
+
+	$options = get_option('bei_options');
+
 	$level = $options['admin'];
 	$front = $options['public'];
 	
@@ -290,7 +293,8 @@ add_action( 'save_post', 'bei_save_meta_box' );
 check_bei_posts();
 function check_bei_posts() {													// function to check that plugin has never 
 																				// been installed before
-	global $options;
+	$options = get_option('bei_options');
+
 	$old = get_option('_back_end_instructions');								// old versions
 				   
 	if($old) {																	// if the plugin is already installed, and it's an older version
@@ -340,7 +344,8 @@ function bei_section_text() {																//nuthin' really.  Might use later.
 }
 
 function bei_setting_string() {
-	global $options;
+	
+	$options = get_option('bei_options');
 	
 	echo __('<span class="description" style="display:block;">Choose the lowest level logged-in user to create/edit/delete Instructions.</span>', 'bei_languages');
 	
@@ -354,7 +359,9 @@ function bei_setting_string() {
 }
 
 function bei_setting_string_public() {
-	global $options;
+	
+	$options = get_option('bei_options');
+
 	$permalink = get_option("home") . '/wp-admin/options-permalink.php';
 	
 	echo sprintf(__('<span class="description" style="display:block;">Check "yes" if you\'d like to make your instructions viewable on the front end of the site. <br /><strong>PLEASE NOTE</strong>: The first time you change this option, you WILL have to <a href="%1$s">re-save your permalink settings</a> for this to take effect.  You may not ever have to do it again, but if you find you have issues after swapping back and forth, then try resetting them again to see if it helps.</span>', 'bei_languages'), $permalink) . "\n\n";
@@ -365,7 +372,8 @@ function bei_setting_string_public() {
 }
 
 function bei_setting_string_private() {
-	global $options;
+	
+	$options = get_option('bei_options');
 	
 	echo __('<span class="description" style="display:block;">Check "yes" if you\'d like to make front-end instructions visible only to logged-in users.<br /><strong>PLEASE NOTE</strong>: if you check "yes" ANYONE can see ALL of these instructions.  See the next option to help with that a bit.</span>', 'bei_languages') . "\n\n";
 	
@@ -374,7 +382,8 @@ function bei_setting_string_private() {
 }	
 
 function bei_setting_string_view() {
-	global $options;
+	
+	$options = get_option('bei_options');
 	
 	echo __('<span class="description" style="display:block;">You only need to choose an option from this dropdown if you set "Show in front?" to "yes" AND "Logged-in users only?" to "no".  If this option were not here, then ANY visitor to the site could see ALL instructions just by visiting the page.  If the user is logged in, they would see only instructions that were available to their level, but if they aren\'t, they would see them for ALL levels.  This option will allow you to treat a non-logged-in user as if they have a user level.  The default is "Contributor."</span>', 'bei_languages') . "\n\n";
 	
@@ -576,7 +585,7 @@ function add_bei_instructions_button() {
 
 function bei_caps() {
 	// makes a fake list of capabilities, since people who aren't logged in won't have any
-	global $options;
+	$options = get_option('bei_options');
 	$view = $options['view'];
 	$caps = array();
 	if($view == 'manage_networks') $caps[] = array('manage_networks', 'activate_plugins', 'edit_others_posts', 'delete_published_posts', 'delete_posts', 'read');
