@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.4
+Version: 2.5
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -25,7 +25,6 @@ License: GPLv2
     
 */
 
-
 /*-----------------------------------------------------------------------------
 				Startup stuff - let's prepare!
 -----------------------------------------------------------------------------*/
@@ -33,15 +32,18 @@ License: GPLv2
 if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) 	// prevent loading of this page from outside WordPress 
 	die('You are not allowed to call this page directly.');
 
-global $current_user, $post;											// globalize
+global $current_user, $post, $pagenow;									// globalize
 $pluginloc = dirname( plugin_basename( __FILE__ ) );
 $address = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"]; // current page's path
 $addy_parts = explode('/', $address);									// get url parts
 $endofurl = end($addy_parts);											// get the last part of the current url
 $class='';																// activate (so you can see it?) or not?
 
-if( !function_exists('wp_set_current_user')	) { 						// check to see if pluggable is pulled in elsewhere to avoided conflicts
-  require(ABSPATH . WPINC . '/pluggable.php');
+if( !function_exists('wp_get_current_user')	) { 						// check to see if pluggable is pulled in elsewhere to avoided conflicts
+  add_action('plugins_loaded', 'bei_load_pluggable');
+}
+function bei_load_pluggable()  {										// only load pluggable after all plugins have loaded
+	require(ABSPATH . WPINC . '/pluggable.php');
 }
 
 add_action('admin_init', 'bei_add_instructions_options');				// add the options array if it's not there
@@ -55,20 +57,9 @@ function bei_add_instructions_options() {
 					   'view' => 'delete_posts');
   		add_option('bei_options', $array, 'yes');						// add the new option array	
 	}
-}
 
-function bei_query_vars($query) {										// be *absolutely sure* these aren't in search results
-    if($query->is_search) { 
-      $types = get_post_types(); 										// get the array of all post types
-      foreach($types as $key => $value) {
-		if ($value == 'instructions') unset($types[$key]); 				// if "instructions" post type is found, remove it
-	  }
-      $query->set('post_type', $types); 								// set post types listed above (all of them, sans "instructions")
-    }
-
-    return $query; 														// return the query and perform the search
+	wp_enqueue_script('jquery');											// enqueue jQuery
 }
-add_filter('pre_get_posts', 'bei_query_vars'); 							// Wonder Twin powers, activate!
 
 
 /*-----------------------------------------------------------------------------
@@ -77,6 +68,7 @@ add_filter('pre_get_posts', 'bei_query_vars'); 							// Wonder Twin powers, act
 
 add_action( 'plugins_loaded', 'bei_languages_for_translation' );
 function bei_languages_for_translation() {
+	global $pluginloc;
 	load_plugin_textdomain( 'bei_languages', false, $pluginloc . '/bei_languages' );
 }
 
@@ -168,7 +160,7 @@ $bei_meta_boxes = array(
 	  "name" => "multi",  
 	  "description" => __('+ ', 'bei_languages'),
 	  "type" => "dynamic",
-	  "choices" => ""
+	  "choices" => array('0' => '')
 	),
 	"video" => array(
 	  "name" => "video_url",  
@@ -244,15 +236,20 @@ $output = '';
 	
 	} elseif($type == 'dynamic') {
 		$output .= '<div class="more_fields">' . "\n";
-    	if($value) {
-    		foreach($value as $value) {
-    			$output .= '<p><strong style="display:inline-block; width:26px; text-align:right; margin-right:7px;"><a href="#" id="' . $name . '" class="add_field" style="text-decoration:none; color:#666; font-style:normal;">' . $desc . '</a></strong></label>' . "\n";
-    			$output .= '<input type="text" name="' . $name . '[]" value="' . $value . '" style="width:170px;" /></p>'; 
-    		}
-    	} else {
-    		$output .= '<p><strong style="display:inline-block; width:26px; text-align:right; margin-right:7px;"><a href="#" id="' . $name . '" class="add_field" style="text-decoration:none; color:#666; font-style:normal;">' . $desc . '</a></strong></label>' . "\n";
-    		$output .= '<input type="text" name="' . $name . '[]" value="' . $value . '" style="width:170px;" /></p>'; 
-    	}
+		if($value) {
+			$count = 0;
+    		foreach($value as $key => $item) {
+    			if($value[$key] == '') continue; // don't show a field if there's no value
+    			$output .= '<p><strong style="display:inline-block; width:26px; text-align:right; margin-right:7px;"></strong>';
+    			//if($count == 0) $output .= '<a href="#" id="' . $name . '" class="add_field" style="text-decoration:none; color:#666; font-style:normal;">' . $desc . '</a></strong>' . "\n";
+    			$output .= '<input type="text" name="' . $name . '[]" value="' . $item . '" style="width:170px;" /></p>';
+    			$count++;
+    		} 
+    	} //else {
+    		$output .= '<p><strong style="display:inline-block; width:26px; text-align:right; margin-right:4px;"><a href="#" id="' . $name . '" class="add_field" style="text-decoration:none; color:#666; font-style:normal;">' . $desc . '</a></strong>' . "\n";
+    		$output .= '<input type="text" name="' . $name . '[]" value="" style="width:170px;" /></p>'; 
+    	//}
+
     	$output .= '</div>' ."\n\n";
     	
     } else {
@@ -283,6 +280,42 @@ function bei_save_meta_box( $post_id ) {
 }
 
 add_action( 'save_post', 'bei_save_meta_box' );
+
+
+/*-----------------------------------------------------------------------------
+					Script for dynamic fields
+-----------------------------------------------------------------------------*/
+
+add_action( "admin_head", 'bei_admin_head_script' );
+function bei_admin_head_script() { 
+	global $pagenow, $typenow;
+	if($typenow == 'instructions') {
+		if(($pagenow == 'post.php') || ($pagenow == 'post-new.php')) { 						// make script show up only where needed ?>
+<!-- back end instructions-->
+<script type="text/javascript">
+jQuery(document).ready(function($) { 
+
+	$(".add_field").click(function() { 
+
+        var intId = $(".more_fields").length + 1;
+        var fieldWrapper = $("<p class=\"fieldwrapper\" id=\"field" + intId + "\"/>");
+        var fName = $("<input type=\"text\" name=\"multi[]\" value=\"\" style=\"width:170px; margin-left:33px;\" />");
+        var removeButton = $("<a class=\"remove_field\" style=\"text-decoration:none; color:#666; font-style:normal; font-weight:bold; cursor:pointer\"> -</a>");
+        removeButton.click(function() {
+            $(this).parent().remove();
+        });
+        fieldWrapper.append(fName);
+        fieldWrapper.append(removeButton);
+        $(".more_fields").append(fieldWrapper);
+    });
+
+});
+
+</script>
+<!-- /back end instructions-->
+<?php }
+	}
+}
 
 
 
@@ -450,8 +483,19 @@ function bei_create_first_post() { 															// create the initial instruct
   
   $bei_first_id = wp_insert_post( $bei_first_post, true ); 									// grabs the ID of the newly-created post at 
   																							// the same time it inserts it
-  update_post_meta($bei_first_id, 'instructions', array('page_id'=>'edit.php?post_type=instructions', 'video_url'=>'http://www.youtube.com/watch?v=5drBD_UD6rI', 'user_level'=>'activate_plugins'));  										// adds the post meta to show the instruction 
+  update_post_meta($bei_first_id, 'instructions', array('page_id'=>'edit.php?post_type=instructions', 'video_url'=>'http://youtu.be/tnLfU1-aYRo', 'user_level'=>'activate_plugins'));  										// adds the post meta to show the instruction 
   																							// on a particular page	
+}
+
+/*-----------------------------------------------------------------------------
+			Now hide that post from Search Engines
+-----------------------------------------------------------------------------*/
+add_action ('wp_head', 'bei_hide_first_post_from_google');
+function bei_hide_first_post_from_google() {
+	global $post;
+	$how_to_use_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = 'bei-how-to' AND post_type = 'instructions'"); 
+	
+	if($post->ID == $how_to_use_id) echo '<meta name="robots" content="noindex">';
 }
 
 
@@ -472,6 +516,7 @@ function array_find($needle, $haystack) {													// testing function
 
 	return false; 
 }
+
 
 add_action('load-'.$pagenow, 'add_bei_instructions_button');
 function add_bei_instructions_button() {
@@ -497,14 +542,15 @@ function add_bei_instructions_button() {
 	endwhile;
 	endif;
 
-	// now we have a list of ID's for instructions that this user is allowed to see.  Let's further narrow the field. 
-	if($ids) {																				// if we actually have instructions for this user...
+	// now we have a list of ID's for instructions that this user is allowed to see.  Let's further narrow the field. 									
+	if($ids) {																			// if we actually have instructions for this user...
 		foreach($ids as $post) :
 			$instruction_info = get_post_meta($post, 'instructions');
-			$page = $instruction_info[0]['page_id'];										// page for this instruction to be displayed on
-			$multi = $instruction_info[0]['multi'];											// secondary pages, if any (this will be an array)
-			$level = $instruction_info[0]['user_level'];									// level that can see this instruction
-			$video = $instruction_info[0]['video_url'];										// video url
+			$instruction_info = $instruction_info[0]; 
+			$page = $instruction_info['page_id'];											// page for this instruction to be displayed on
+			$multi = $instruction_info['multi'];											// secondary pages, if any (this will be an array)
+			$level = $instruction_info['user_level'];										// level that can see this instruction
+			$video = $instruction_info['video_url'];										// video url
 			$vid_id = 'player-' . $post;													// video IDs
 
 			if($level == 'administrator' || $level == 'Administrator') $level = 'activate_plugins';	// replace the old values
@@ -605,19 +651,19 @@ function bei_test_front_end_info($type = '') {
 	$reg = $options['registered']; 											// allow only registered users to see on front end? 
 	$login = get_option('home') . '/wp-login.php';							// login url 
 	
-	if($public == 'yes') {								// check to see if these should be visible on the front end
+	if($public == 'yes') {													// check to see if these should be visible on the front end
 	
-		if($reg == 'yes') {								// check to see if registration is required.
+		if($reg == 'yes') {													// check to see if registration is required.
 		
-			if(!is_user_logged_in()) {					// if required, check to see that the user is logged in.
+			if(!is_user_logged_in()) {										// if required, check to see that the user is logged in.
 			
 				$output  = '<div class="entry-content">';
 				$output .= sprintf(__('I\'m sorry, but you must first be <a href="%1$s">logged in</a> to view this page.', 'bei_languages'), $login);
 				$output .= '</div>';
-				echo $output;								// if not, give them a message to log in.
-				$showposts = false;							// don't show posts
+				echo $output;												// if not, give them a message to log in.
+				$showposts = false;											// don't show posts
 			} else {
-		  		$showposts = true;							// show 'em if logged in
+		  		$showposts = true;											// show 'em if logged in
 		  	} 
 		  				  
 		  		if($showposts == false) $showposts = false;
@@ -635,7 +681,7 @@ function bei_test_front_end_info($type = '') {
 	elseif($type == 'message') return $output;
 }
 
-function bei_instructions_query_filter() {									// the query to get the post IDs of qualifying instructions
+function bei_instructions_query_filter() {										// the query to get the post IDs of qualifying instructions
 	global $wpdb, $options, $current_user;
 	$view = $options['view']; 											    	// default user level for non-logged-in users 
 	if(!is_user_logged_in()) $caps = bei_caps();								// get end user's capabilities for non-logged-in users
@@ -682,3 +728,15 @@ function bei_next_prev_links($type='', $previous='', $next='') {
 	echo $link;
 	
 }
+
+
+/*-----------------------------------------------------------------------------
+				Debug
+-----------------------------------------------------------------------------*/
+
+/*add_action('activated_plugin','save_error');
+function save_error(){
+    update_option('plugin_error',  ob_get_contents());
+}
+echo get_option('plugin_error');*/
+

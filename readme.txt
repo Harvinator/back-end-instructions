@@ -4,7 +4,7 @@ Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 2.4
+Stable tag: 2.5
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -65,7 +65,7 @@ So let's start with "Add New."
 
 3. **Add in an excerpt, if desired.**  The excerpt would be a good spot to give a small description of what's going on in this post. I find it very useful to place timestamps (and a small description of what you find at each timestamp) in the excerpt section.  Whatever you place in the excerpt area will show up below the content.
 
-4. **Regarding Shortcodes ** Several people have asked me, in the past, to make it possible to write shortcodes without having them parsed, so people can give examples of how to write and use the shortcodes.  The good thing about moving the shortcodes into the help menu is that the help menu is meant for static text only, and shortcodes are completely stripped.  I've provided a method for putting shortcode content in the instructional post without having it stripped, and without parsing the information.  Simply replace the "[" and "]" with "{{" and "}}".  Your shortcodes will display (not be parsed) so you can teach people whow to use them.  
+4. **Regarding Shortcodes ** Several people have asked me, in the past, to make it possible to write shortcodes without having them parsed, so people can give examples of how to write and use the shortcodes.  The good thing about moving the shortcodes into the help menu is that the help menu is meant for static text only, and shortcodes are completely stripped.  I've provided a method for putting shortcode content in the instructional post without having it stripped, and without parsing the information.  Simply replace the "[" and "]" with "{{" and "}}".  Your shortcodes will display (not be parsed) so you can teach people how to use them.  
 
 	*NOTE* On the front end of the site, the shortcodes WILL be parsed. For example: {{gallery}} will actually work exactly like [gallery] when viewing on the front end, and display your gallery of images; but {{gallery}} will display [gallery] on the back end.
 
@@ -146,9 +146,17 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 == Changelog ==
 
+= 2.5 =
+* pluggable.php won't load until after ALL plugins have loaded, and only if needed.
+* removed the bei_query_vars function, as it was causing issues with filtering posts in the admin. (It was a function put in a long time ago to make sure the instructions ddn't show up in search results - but the function is no longer necessary as it's taken care of in the options page)
+* Fixed a jQuery conflict that was causing the "+" fields to not work.
+* Fixed issue with "xxxx characters of unexpected output" upon activation.
+* Updated "How To" video to show the new features, etc. (the old one was causing confusion - pardon my laziness!)
+* Fixed it so the initial "How To Use Back End Instructions" post isn't indexed in the search engines, because no one wants that.
+
 = 2.4 =
 * Finally fixed the issue of the Instructions post type not showing up when Wordpress SEO is installed and activated.
-* Fixed issue where radio buttons don't function in settgins page when the Ultimate TinyMCE (by Josh Lobe - tested version 4.0.3, which was the only version I have access to) plugin is used.
+* Fixed issue where radio buttons don't function in setting page when the Ultimate TinyMCE (by Josh Lobe - tested version 4.0.3, which was the only version I have access to) plugin is used.
 
 = 2.3 =
 * Discovered an issue where instructions that were created before version 2.2 would not show up anywhere after the upgrade.  My bad.  Variable misnaming.  It's now fixed.
@@ -213,8 +221,7 @@ This is an "idiot's release" - I committed changes before I was supposed to - an
 
 = 0.3 = 
 * tested for WordPress 3.1
-* cleaned up/streamline terminal
-d code
+* cleaned up/streamlined terminal code
 
 = 0.2 = 
 * Fixed issue where instructions for the dashboard wouldn't show up upon initial login (dashboard).
@@ -224,8 +231,6 @@ d code
 
 == Upgrade Notice ==
 
-= 1.0 =
-Fixed some bugs, streamlined code, added HTML5 video capabilities.
 
 == Other Notes ==
 
