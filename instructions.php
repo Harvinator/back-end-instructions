@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.5
+Version: 2.5.1
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -492,7 +492,7 @@ function bei_create_first_post() { 															// create the initial instruct
 -----------------------------------------------------------------------------*/
 add_action ('wp_head', 'bei_hide_first_post_from_google');
 function bei_hide_first_post_from_google() {
-	global $post;
+	global $wpdb, $post;
 	$how_to_use_id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = 'bei-how-to' AND post_type = 'instructions'"); 
 	
 	if($post->ID == $how_to_use_id) echo '<meta name="robots" content="noindex">';

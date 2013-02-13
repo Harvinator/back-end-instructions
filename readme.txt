@@ -4,7 +4,7 @@ Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 2.5
+Stable tag: 2.5.1
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -145,6 +145,9 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 2.5.1 =
+* Bugfix: missing variable.
 
 = 2.5 =
 * pluggable.php won't load until after ALL plugins have loaded, and only if needed.
