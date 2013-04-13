@@ -4,7 +4,7 @@ Plugin Name: Back-End Instructions
 Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
 Description: Plugin to provide nice little instructions for back-end WordPress users
 Author: Shelly Cole
-Version: 2.5.1
+Version: 2.5.2
 Author URI: http://brassblogs.com
 License: GPLv2
 
@@ -520,7 +520,7 @@ function array_find($needle, $haystack) {													// testing function
 
 add_action('load-'.$pagenow, 'add_bei_instructions_button');
 function add_bei_instructions_button() {
-	global $current_user, $user_level, $post, $pagenow, $endofurl, $class, $address, $pluginloc, $options;
+	global $wpdb, $current_user, $user_level, $post, $pagenow, $endofurl, $class, $address, $pluginloc, $options;
 	
 	$screen = get_current_screen();
 	$this_screen = $screen->base; 
@@ -530,16 +530,18 @@ function add_bei_instructions_button() {
     $address = $address[0];																	// grab the last URL bit (the page we're on)
 	
 	$ids = array();																			// set up array of ID's that fit
-	$instruction_query = new WP_Query(array('post_type' => 'instructions', 'post_status' => 'publish' ) );		// query
-	
-	if($instruction_query->have_posts()) : while($instruction_query->have_posts()) : $instruction_query->the_post();
-		$post_id = get_the_ID();
+	// we must use a custom select query, and NOT us "setup_postdata", because the $post variable conflicts with other plugins
+    $sql = "SELECT $wpdb->posts.* FROM $wpdb->posts WHERE $wpdb->posts.post_type = 'instructions' AND $wpdb->posts.post_status = 'publish'";
+    $instructions = $wpdb->get_results($sql, OBJECT);
+    if( $instructions ) :
+    	foreach( $instructions as $ins ) : 
+		$post_id = $ins->ID;
 		$instruction_info = get_post_meta($post_id, 'instructions');
 		$page = $instruction_info[0]['page_id'];											// page this is supposed to be on
 		
 		$ids[] = $post_id;
 
-	endwhile;
+	endforeach;
 	endif;
 
 	// now we have a list of ID's for instructions that this user is allowed to see.  Let's further narrow the field. 									
@@ -548,7 +550,8 @@ function add_bei_instructions_button() {
 			$instruction_info = get_post_meta($post, 'instructions');
 			$instruction_info = $instruction_info[0]; 
 			$page = $instruction_info['page_id'];											// page for this instruction to be displayed on
-			$multi = $instruction_info['multi'];											// secondary pages, if any (this will be an array)
+			if(!empty($instruction_info['multi']))
+				$multi = $instruction_info['multi'];											// secondary pages, if any (this will be an array)
 			$level = $instruction_info['user_level'];										// level that can see this instruction
 			$video = $instruction_info['video_url'];										// video url
 			$vid_id = 'player-' . $post;													// video IDs

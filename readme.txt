@@ -3,8 +3,8 @@ Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
-Tested up to: 3.5
-Stable tag: 2.5.1
+Tested up to: 3.5.1
+Stable tag: 2.5.2
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -145,6 +145,9 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 2.5.2 =
+* Bugfix: swapped a custom loop for a custom query to fix a reported conflict with a WooThemes theme.
 
 = 2.5.1 =
 * Bugfix: missing variable.
