@@ -3,8 +3,8 @@ Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions
 Requires at least: 3.1
-Tested up to: 3.5.1
-Stable tag: 2.5.2
+Tested up to: 3.6-beta3
+Stable tag: 3.0
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -21,16 +21,16 @@ This plugin solves the issue.  Now there can be no more excuses for not finding 
 
 = Features =
 
-1. Version 2.0 now uses hooks to plug itself into the "Help" tab, so no extra buttons are necessary, and the location of the "Instructions" is more intuitive.
+1. Version 3.0 now has the option of using a custom tab, or the ability to be integrated in the WordPress "Help" tab.
 2. Due to popular demand, I've added in a new feature where you can add a single instruction to multiple pages. 
 3. Choose the tab (named by your post title), and the "instructable" displays the content.
     - Content can be a written list of instructions, or some other form of media.
     - Content can be anything you like, and you can use it just like you would any other post - the only difference is, this stuff shows up in the back-end.
-4. A new options page will allow you to set what user level can add/edit/delete "instructables", as well as allow you to choose whether or not to make the instructions viewable from the front end. You can also choose to make front-end "instructables" viewable to the public, or only to logged-in users (a message will display in place of the content if you want to restrict it to logged-in users).  You can also give non-logged-in users "capabilities" to restrict what they see.
+4. The options page will allow you to set what user level can add/edit/delete "instructables", as well as allow you to choose whether or not to make the instructions viewable from the front end. You can also choose to make front-end "instructables" viewable to the public, or only to logged-in users.  You can also give non-logged-in users "capabilities" to restrict what they see.
 5. You can set what end user level can view which instructions. For example, you don't want an Author to see the same instructions for "Edit Posts" that an Administrator would see - it would confuse them. So you can also create content and serve up specific information based on the user level, if you so desire. 
 
 Note that upper levels will also see lower-level videos, so keep that in mind while preparing your instructions. I recommend making videos/content specific to the lowest level first, and then build onto that base as you go up the user-level chain of command. 
-6. Tested (and found ot work) in Multi-Site.
+6. Multi-Site capable.
 
 
 == Installation ==
@@ -42,6 +42,9 @@ Installation is simple, and adds nothing more to your database than an options a
 	- back-end-instructions (folder)
 	  - bei_languages (folder)
 	  - &nbsp; &nbsp; back-end-instructions.pot (file)
+	  - css (folder)
+	  - &nbsp; &nbsp; bei_colors-classic.css (file)
+	  - &nbsp; &nbsp; bei_colors-fresh.css (file)	  
 	  - instructions.php (file)
 	  - mytheme (folder)
 	  - &nbsp; &nbsp; archive-instructions.php (file)	
@@ -87,6 +90,8 @@ So let's start with "Add New."
    	
 6. **Settings** In the right sidebar, under "Settings > Back End Instructions", you'll find the settings page for the instructions defaults.
 
+	**Use a custom help tab?** This was somethign that was originally put into the plugin, and then removed later (when it was really easy - and made sense - to pop this stuff in the help tab).  But it's been requested that the option be put back in, because apparently some of you all like to get rid of the help tabs :)  Check "Yes" for this option, and the custom Instructions tab will hold the instructions, instead of the WordPress Help Tab.
+
 	**Default Admin Level** This is the lowest user level you'd like to have access to create and edit Instructions.  The lowest level you can choose is "Author" ("Contributor" and "Subscriber" are just asking for trouble, so they are not options. "Author" is pushing it, but I leave it there anyway, because I can see instances where that would be helpful.)  This setting does not give permissions that the user level doesn't already have.  For example, if you set the level to "Author", then the authors of your site can write, edit and publish instructions, but it doesn't give them any extra capabilities like activating plugins and such.
 	
 	**Show in Front?** If you'd like to make your instructions visible on the front end, set this to "yes".  If it's the first time you're doing this, you WILL need to redo your permalinks. (All you have to do is go to your permalinks settings and hit the "save changes" button.)  If you swap this option back and forth, it may throw the system for a loop, so just try re-saving your permalinks again to see if that clears things up.
@@ -101,6 +106,9 @@ So let's start with "Add New."
 
 
 == Frequently Asked Questions ==
+
+= The instructions aren't showing when I use the custom instructions tab.
+This actually has to do with jQuery and the character output.  The plugin uses jQuery to add the custom tab, as well as pull in the content from the instruction post.  If you use double quotation marks, brackets, and a few other types of characters, it will break the jQuery and cause the tab to not show.  If you run into these issues, try using an [HTML Character Entity](http://www.addedbytes.com/download/html-character-entities-cheat-sheet/png/) to replace the questionable characters in your content.  I currently do not have a running list of what characters cause the jQuery in this plugin to break - but I do know that "" and [] will do it if it's in your content.  Replace them with the appropriate HTML Entities (in this example, &amp;#34; for the double quotes and  &amp;#91; and &amp;#93; for the brackets), and your problem is solved (and the display will be fine).
 
 = How do you pull these posts into the front end of the site? =
 As of version 2.0 - due to the numerous requests I've gotten, you can now show them on the front-end of the site if you so desire.  Under "Settings > Back End Instructions", you may now choose to display the instructions on the front end of the site, as well as choose to keep them private (i.e. open them up to the public, or make a user log in before viewing).  See the "How to Use" section for further instructions.
@@ -134,7 +142,7 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 = Known Issues = 
 
-* Bug with swapping instructions that contain playing videos.  If you change tabs, the video of the previously-opened tab will continue to play in the background.  So you have to be sure to stop the video before you change tabs. If you're a guru at jQuery, and feel like you might know the solution, have at it! In the meantime, I'll still be plugging away, trying to sort this out.
+* Bug with swapping instructions that contain playing videos. So far, I can only get YouTube videos to stop on tab switch. .swf, Vimeo and other player versions are still buggy in this regard.  If you change tabs, the video of the previously-opened tab will continue to play in the background.  So you have to be sure to stop the video before you change tabs. If you're a guru at jQuery, and feel like you might know the solution, have at it! In the meantime, I'll still be plugging away, trying to sort this out.
 
 
 == Screenshots ==
@@ -145,6 +153,15 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 3.0 =
+* made a few security fixes
+* updated the options table
+* removed the addition of the "first post" since it's really unnecessary
+* re-added the "Instructions" tab - but now it's optional
+* heavy rewrite of code to clean up and streamline
+* added css admin files (for custom "Instructions" tab to match user settings admin colors)
+* fixed the replacement brackets for shortcodes ("{{ }}") so the front-end instructions no longer parse them
 
 = 2.5.2 =
 * Bugfix: swapped a custom loop for a custom query to fix a reported conflict with a WooThemes theme.
