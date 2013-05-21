@@ -1,7 +1,7 @@
 === Back End Instructions ===
 Contributors: doodlebee
 Donate link: http://brassblogs.com/donate
-Tags: developers, clients, instructions
+Tags: developers, clients, instructions, client sites, docs, documentation, help
 Requires at least: 3.1
 Tested up to: 3.6-beta3
 Stable tag: 3.1
@@ -156,6 +156,7 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 = 3.1 =
 * Bugfix - renamed a variable that was causing a conflict with other plugins.
+* Added German and Spanish translations. I don't speak German or Spanish, so if I'm off, please feel free to edit :)
 
 = 3.0 =
 * made a few security fixes
@@ -257,6 +258,7 @@ This is an "idiot's release" - I committed changes before I was supposed to - an
 
 == Upgrade Notice ==
 
+This update provides a few bugfixes, and contains a few search and minor security fixes.  I have also added a Spanish and German translation.  If you have any issues, please ask in the <a href="http://wordpress.org/support/plugin/back-end-instructions">support forums</a> for the plugin.  I\'m pretty good about helping out!
 
 == Other Notes ==
 

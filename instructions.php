@@ -3,11 +3,13 @@
  * Plugin Name: Back-End Instructions
  * Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
  * Description: Plugin to provide nice little instructions for back-end WordPress users.
- * Version: 3.0
+ * Version: 3.1
  * Author: Shelly Cole
  * Author URI: http://brassblogs.com
  * Requires at least: 3.1
  * Tested up to: 3.5.1
+ * Text Domain: localizationsample
+ * Domain Path: /bei_languages
  */
 
 
@@ -36,7 +38,7 @@ if( preg_match( '#' . basename( __FILE__ ) . '#', $_SERVER['PHP_SELF'] ) )
  * BEI_CUR_QUERY	gets the current page filename with querystrings
  * BEI_META_KEY		defines the key for the custom post type metaboxes
  *
- * $options 		gets options from the DB
+ * $bei_options 	gets options from the DB
  */
 
 global $pagenow, $post;
@@ -49,7 +51,7 @@ define( 'BEI_CUR_PAGE', 	pathinfo( basename( $_SERVER['PHP_SELF'] ), PATHINFO_FI
 define( 'BEI_CUR_QUERY', 	basename( $_SERVER['REQUEST_URI'] ) );
 define( 'BEI_META_KEY', 	'_bei_instructions');
 
-$options = get_option( '_bei_options' );
+$bei_options = get_option( '_bei_options' );
 
 
 /**
@@ -98,7 +100,8 @@ add_filter( 'the_content', 			'bei_mess_with_shortcodes' );
 if($post && $post->post_type == 'instructions')
 	remove_filter( 'the_content', 'wptexturize' );
 
-if($options['custom_tab'] == 'yes') 
+if($bei_options
+['custom_tab'] == 'yes') 
 	add_action( 'admin_head', 'bei_custom_instruction_tab');
 
 
@@ -133,7 +136,8 @@ function bei_query_vars( $query ) {
  */
 				
 function bei_add_instructions_options() {
-	global $wpdb, $options; 
+	global $wpdb, $bei_options
+; 
 	$tp = $wpdb->prefix . 'options';
 
 	// set up the default array
@@ -160,7 +164,8 @@ function bei_add_instructions_options() {
 	}
 	
 	// if the new option is not set...
-	if( !$options ) {	
+	if( !$bei_options
+ ) {	
 		// add the default setup
   		add_option( '_bei_options', $array, '', 'yes' );						
 	} else {
@@ -269,13 +274,19 @@ function bei_section_text() {
  */
 
 function bei_custom_help_tab() {
-	global $options;
-	
+	global $bei_options;
+	var_dump($bei_options);
 	echo '<span class="description" style="display:block;">' . __( 'By default, Back End Instructions just ties into the WordPress standard "help" tab.  This option will allow you to use a standalone custom tab, instead.', 'bei_languages' ) , '</span>';
 	
-	if( !isset( $options['custom_tab'] ) ) $options['custom_tab'] = 'no';
-	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="yes" ' . ( isset($options["custom_tab"] ) && $options["custom_tab"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
-	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="no"  ' . ( isset($options["custom_tab"] ) && $options["custom_tab"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
+	if( !isset( $bei_options
+['custom_tab'] ) ) $bei_options
+['custom_tab'] = 'no';
+	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="yes" ' . ( isset($bei_options
+["custom_tab"] ) && $bei_options
+["custom_tab"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
+	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="no"  ' . ( isset($bei_options
+["custom_tab"] ) && $bei_options
+["custom_tab"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
 }
 
 /** 
@@ -283,17 +294,26 @@ function bei_custom_help_tab() {
  */
 
 function bei_setting_string() {
-	global $options;
+	global $bei_options
+;
 	
 	echo '<span class="description" style="display:block;">' . __( 'Choose the lowest level logged-in user to create/edit/delete Instructions.', 'bei_languages' ) , '</span>';
 	
-	if(is_multisite()) {																	// test that this is a multi-site install	
-	  echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="manage_network" ' . ( isset( $options["admin"] ) && $options["admin"] == "manage_network" ? 'checked="checked" ' : '' ) . '/> ' . __( 'Super Administrator (for multi-site only)', 'bei_languages' ) . '<br />';
-	}
+	if(is_multisite())																	// test that this is a multi-site install	
+	  echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="manage_network" ' . ( isset( $bei_options
+["admin"] ) && $bei_options
+["admin"] == "manage_network" ? 'checked="checked" ' : '' ) . '/> ' . __( 'Super Administrator (for multi-site only)', 'bei_languages' ) . '<br />';
+
 	
-	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="activate_plugins" ' 		. ( isset( $options["admin"] ) && $options["admin"] == "activate_plugins" ? 		'checked="checked" ' : '' ) . '/> ' . __( 'Administrator', 'bei_languages' ) . '<br />';
-	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="edit_others_posts" ' 		. ( isset( $options["admin"] ) && $options["admin"] == "edit_others_posts" ? 		'checked="checked" ' : '' ) . '/> ' . __( 'Editor', 'bei_languages' ) . '<br />';
-	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="delete_published_posts" ' 	. ( isset( $options["admin"] ) && $options["admin"] == "delete_published_posts" ? 	'checked="checked" ' : '' ) . '/> ' . __( 'Author', 'bei_languages' );
+	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="activate_plugins" ' 		. ( isset( $bei_options
+["admin"] ) && $bei_options
+["admin"] == "activate_plugins" ? 		'checked="checked" ' : '' ) . '/> ' . __( 'Administrator', 'bei_languages' ) . '<br />';
+	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="edit_others_posts" ' 		. ( isset( $bei_options
+["admin"] ) && $bei_options
+["admin"] == "edit_others_posts" ? 		'checked="checked" ' : '' ) . '/> ' . __( 'Editor', 'bei_languages' ) . '<br />';
+	echo '<input id="bei_admin" name="_bei_options[admin]" size="40" type="radio" value="delete_published_posts" ' 	. ( isset( $bei_options
+["admin"] ) && $bei_options
+["admin"] == "delete_published_posts" ? 	'checked="checked" ' : '' ) . '/> ' . __( 'Author', 'bei_languages' );
 }
 
 
@@ -302,15 +322,21 @@ function bei_setting_string() {
  */
 
 function bei_setting_string_public() {	
-	global $options;
+	global $bei_options;
 
 	$permalink = get_option( 'site_url' ) . '/wp-admin/options-permalink.php';
 	
 	echo '<span class="description" style="display:block;">' . sprintf( __( 'Check "yes" if you\'d like to make your instructions viewable on the front end of the site. <br /><strong>PLEASE NOTE</strong>: The first time you change this option, you WILL have to <a href="%1$s">re-save your permalink settings</a> for this to take effect.  You may not ever have to do it again, but if you find you have issues after swapping back and forth, then try resetting them again to see if it helps.</span>', 'bei_languages' ), $permalink ) . "\n\n";
 	
-	if( !isset( $options['public'] ) ) $options['public'] = 'no';
-	echo '<input id="bei_public" name="_bei_options[public]" size="40" type="radio" value="yes" ' . ( isset($options["public"] ) && $options["public"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
-	echo '<input id="bei_public" name="_bei_options[public]" size="40" type="radio" value="no"  ' . ( isset($options["public"] ) && $options["public"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
+	if( !isset( $bei_options
+['public'] ) ) $bei_options
+['public'] = 'no';
+	echo '<input id="bei_public" name="_bei_options[public]" size="40" type="radio" value="yes" ' . ( isset($bei_options
+["public"] ) && $bei_options
+["public"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
+	echo '<input id="bei_public" name="_bei_options[public]" size="40" type="radio" value="no"  ' . ( isset($bei_options
+["public"] ) && $bei_options
+["public"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
 }
 
 
@@ -319,12 +345,17 @@ function bei_setting_string_public() {
  */
 
 function bei_setting_string_private() {
-	global $options;
+	global $bei_options
+;
 	
 	echo '<span class="description" style="display:block;">' . __( 'Check "yes" if you\'d like to make front-end instructions visible only to logged-in users.<br /><strong>PLEASE NOTE</strong>: if you check "yes" ANYONE can see ALL of these instructions.  See the next option to help with that a bit.', 'bei_languages' ) . '</span>' . "\n\n";
 	
-	echo '<input id="bei_registered" name="_bei_options[registered]" size="40" type="radio" value="yes" ' . ( isset( $options["registered"] ) && $options["registered"] == "yes" ? 'checked="checked" ' : '') . '/> Yes &nbsp; &nbsp; ' . "\n";
-	echo '<input id="bei_registered" name="_bei_options[registered]" size="40" type="radio" value="no"  ' . ( isset( $options["registered"] ) && $options["registered"] == "no"  ? 'checked="checked" ' : '') . '/> No' . "\n\n";
+	echo '<input id="bei_registered" name="_bei_options[registered]" size="40" type="radio" value="yes" ' . ( isset( $bei_options
+["registered"] ) && $bei_options
+["registered"] == "yes" ? 'checked="checked" ' : '') . '/> Yes &nbsp; &nbsp; ' . "\n";
+	echo '<input id="bei_registered" name="_bei_options[registered]" size="40" type="radio" value="no"  ' . ( isset( $bei_options
+["registered"] ) && $bei_options
+["registered"] == "no"  ? 'checked="checked" ' : '') . '/> No' . "\n\n";
 }
 
 
@@ -333,7 +364,8 @@ function bei_setting_string_private() {
  */
 
 function bei_setting_string_view() {
-	global $options;
+	global $bei_options
+;
 	
 	echo '<span class="description" style="display:block;">' . __( 'You only need to choose an option from this dropdown if you set "Show in front?" to "yes" AND "Logged-in users only?" to "no".  If this option were not here, then ANY visitor to the site could see ALL instructions just by visiting the page.  If the user is logged in, they would see only instructions that were available to their level, but if they aren\'t, they would see them for ALL levels.  This option will allow you to treat a non-logged-in user as if they have a user level.  The default is "Contributor."', 'bei_languages' ) . '</span>' . "\n\n";
 	
@@ -352,7 +384,8 @@ function bei_setting_string_view() {
 	echo '<p><select id="bei_view" name="_bei_options[view]">' . "\n";
 		
 	foreach( $choices as $key => $value ) {
-		echo '<option value="' . $value . '"' . selected($options['view'], $value, false) . '>' . $key .'</option>' . "\n";
+		echo '<option value="' . $value . '"' . selected($bei_options
+['view'], $value, false) . '>' . $key .'</option>' . "\n";
 	}	
 	
 	echo '</select></p>' . "\n";	
@@ -390,10 +423,13 @@ function bei_languages_for_translation() {
  */
 
 function bei_create_instructions_management() {
-	global $current_user, $options;
+	global $current_user, $bei_options
+;
 
-	$level = $options['admin'];
-	$front = $options['public'];
+	$level = $bei_options
+['admin'];
+	$front = $bei_options
+['public'];
 
 	// version check
 	if( !function_exists( 'get_site_url' ) ) 
@@ -731,7 +767,8 @@ function bei_custom_instruction_tab() {
  */
 
 function bei_add_instructions_button($items = '') {
-	global $wpdb, $current_user, $user_level, $post, $pagenow, $options;
+	global $wpdb, $current_user, $user_level, $post, $pagenow, $bei_options
+;
 	get_currentuserinfo();	
 
 	// if a custom instruction tab is needed, this is the array setup
@@ -831,7 +868,8 @@ function bei_add_instructions_button($items = '') {
 	          			}
 					}
 
-					if( $items == '' && $options['custom_tab'] == 'no' )	{	
+					if( $items == '' && $bei_options
+['custom_tab'] == 'no' )	{	
 						// Now show them :)		
 						$screen->add_help_tab( array('id' 		=> $id,
 	   												 'title' 	=> $title, 
@@ -867,8 +905,10 @@ function bei_add_instructions_button($items = '') {
  */
 
 function bei_caps() {
-	global $options; 
-	$view = $options['view'];
+	global $bei_options
+; 
+	$view = $bei_options
+['view'];
 	$caps = array();
 	if( $view == 'manage_networks' ) 		$caps[] = array('manage_networks', 'activate_plugins', 'edit_others_posts', 'delete_published_posts', 'delete_posts', 'read');
 	if( $view == 'activate_plugins' ) 		$caps[] = array('activate_plugins', 'edit_others_posts', 'delete_published_posts', 'delete_posts', 'read');
@@ -887,13 +927,17 @@ function bei_caps() {
  */
 
 function bei_search_query_filter( $query ) {	
-	global $wpdb, $post, $options, $current_user;
+	global $wpdb, $post, $bei_options
+, $current_user;
 	// default user level for non-logged-in users 
-	$view 	= $options['view'];
+	$view 	= $bei_options
+['view'];
 	// show in front?
-	$public = $options['public'];
+	$public = $bei_options
+['public'];
 	// logged-in users only?
-	$reg 	= $options['registered']; 
+	$reg 	= $bei_options
+['registered']; 
 	// fake capabilities (user is not logged in)
 	if( !is_user_logged_in() ) $caps = bei_caps();
 	// actual capabilities (user is logged in)
@@ -968,15 +1012,6 @@ function bei_mess_with_shortcodes($content) {
 /*-----------------------------------------------------------------------------
 							Administrative Stuff
 -----------------------------------------------------------------------------*/
-/**
- * Add an extra update message to the update plugin notification.
- */
-
-function bei_core_update_message() {
-	echo '<p style="font-weight:bold">' . __( 'This update provides a few bugfixes (especially where WooThemes\' "Canvas" theme is involved), and contains a few search and minor security fixes.  If you have any issues, please ask in the <a href="http://wordpress.org/support/plugin/back-end-instructions">support forums</a> for the plugin.  I\'m pretty good about helping out!', 'bei_languages' ) . '</p>';
-}
-add_action( 'in_plugin_update_message-' . plugin_basename(__FILE__), 'bei_core_update_message' );
-
 
 /**
  * Debug - show stuff on activation
