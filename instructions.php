@@ -3,7 +3,7 @@
  * Plugin Name: Back-End Instructions
  * Plugin URI: http://wordpress.org/extend/plugins/back-end-instructions/
  * Description: Plugin to provide nice little instructions for back-end WordPress users.
- * Version: 3.1
+ * Version: 3.1.1
  * Author: Shelly Cole
  * Author URI: http://brassblogs.com
  * Requires at least: 3.1
@@ -111,7 +111,7 @@ if($bei_options
 
 function bei_query_vars( $query ) {
 	// only perform the action on front-end search results
-    if( $query->is_search ) {
+    if( $query->is_search && !is_admin() ) {
 
       // get the array of all post types
       $types = get_post_types(); 
@@ -275,18 +275,12 @@ function bei_section_text() {
 
 function bei_custom_help_tab() {
 	global $bei_options;
-	var_dump($bei_options);
 	echo '<span class="description" style="display:block;">' . __( 'By default, Back End Instructions just ties into the WordPress standard "help" tab.  This option will allow you to use a standalone custom tab, instead.', 'bei_languages' ) , '</span>';
 	
-	if( !isset( $bei_options
-['custom_tab'] ) ) $bei_options
-['custom_tab'] = 'no';
-	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="yes" ' . ( isset($bei_options
-["custom_tab"] ) && $bei_options
-["custom_tab"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
-	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="no"  ' . ( isset($bei_options
-["custom_tab"] ) && $bei_options
-["custom_tab"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
+	if( !isset( $bei_options ['custom_tab'] ) ) $bei_options['custom_tab'] = 'no';
+	
+	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="yes" ' . ( isset($bei_options["custom_tab"] ) && $bei_options["custom_tab"] == "yes" ? 'checked="checked" ' : '' ) . '/> Yes &nbsp; &nbsp; ' . "\n";
+	echo '<input id="bei_custom_tab" name="_bei_options[custom_tab]" size="40" type="radio" value="no"  ' . ( isset($bei_options["custom_tab"] ) && $bei_options["custom_tab"] == "no"  ? 'checked="checked" ' : '' ) . '/> No' . "\n\n";
 }
 
 /** 

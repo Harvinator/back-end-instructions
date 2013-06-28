@@ -4,7 +4,7 @@ Donate link: http://brassblogs.com/donate
 Tags: developers, clients, instructions, client sites, docs, documentation, help
 Requires at least: 3.1
 Tested up to: 3.6-beta3
-Stable tag: 3.1
+Stable tag: 3.1.1
 License: GPLv2 or later
 
 Plugin for WordPress developers to provide easy "how to use" instructions to their clients.
@@ -153,6 +153,9 @@ By all means, feel free to ask away.  I'd also love input on features you'd like
 
 
 == Changelog ==
+
+= 3.1.1 =
+* Bugfix - search in the back end was messed up.
 
 = 3.1 =
 * Bugfix - renamed a variable that was causing a conflict with other plugins.
