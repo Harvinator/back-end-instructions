@@ -507,6 +507,11 @@ $bei_meta_boxes = array('_bei_pages' => array('name' 		=> 'page_id',
 	  										  'type' 		=> 'dynamic',
 	  										  'choices'		=> ''
 											 ),
+						'_bei_ptlock' => array('name' 		=> 'pt_lock',  
+	  									 	  'description' => __('Post Type Lock: ', 	'bei_languages'),
+	  									 	  'type'		=> '',
+	  									 	  'choices' 	=> ''
+											 ), 
 						'_bei_video' => array('name' 		=> 'video_url',  
 	  										  'description' => __('Video URL: ', 	'bei_languages'),
 	  										  'type'		=> '',
@@ -553,7 +558,7 @@ function bei_display_meta_box() {
     	$desc 		= $meta_box['description'];
     	$type 		= $meta_box['type'];
     	$choices 	= $meta_box['choices'];
-	
+		
 		// dropdown choices
 		if($type == 'dropdown') {					
 	  		$output .= '<div class="misc-pub-section ' . sanitize_title_with_dashes($name) . '" style="border-bottom:none;">
@@ -771,7 +776,11 @@ function bei_add_instructions_button($items = '') {
 	// obtain current screen info 	
 	$screen 		= get_current_screen();
 	$this_screen 	= $screen->base;										
-	$address 		= BEI_CUR_QUERY;	
+	$address 		= BEI_CUR_QUERY;					
+	
+	// get the id of the current post being edited and use it to get the posttype
+	preg_match("/(post)=([0-9]+)&?/", parse_url(BEI_CUR_URL, PHP_URL_QUERY), $pid);
+	$curr_post_type	= get_post_type( $pid[2] );
 	
 	// we must use a custom select query, and NOT us "setup_postdata", because the $post variable conflicts with other plugins
     $sql = "SELECT $wpdb->posts.* FROM $wpdb->posts WHERE $wpdb->posts.post_type = 'instructions' AND $wpdb->posts.post_status = 'publish'";
@@ -782,6 +791,7 @@ function bei_add_instructions_button($items = '') {
 			$post_id = $ins->ID;
 			$bei_pages = get_post_meta( $post_id, '_bei_instructions', false );
 			if($bei_pages) {
+				$bei_ptlock = $bei_pages[0]['pt_lock'];
 				$bei_page = $bei_pages[0]['page_id'];
 				$bei_multi = $bei_pages[0]['multi'];
 
@@ -815,7 +825,10 @@ function bei_add_instructions_button($items = '') {
 
 				// if the current page is not part of the array of instructions, skip it
 				if( $find == FALSE ) continue; 
-
+				
+				// if the current page is not required for this post type, skip it
+				if( isset($bei_ptlock) && $bei_ptlock != '' && $bei_ptlock != $curr_post_type) continue; 
+				
 				if(current_user_can($bei_level)) :
 					$post_info 	= get_post( $post_id );
 					$id 		= 'bei-tab-' . $post_id;
